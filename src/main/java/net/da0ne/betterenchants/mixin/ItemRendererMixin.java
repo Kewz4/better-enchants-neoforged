@@ -69,35 +69,47 @@ public class ItemRendererMixin {
 
     @ModifyReceiver(method = "renderBakedItemQuads", at =  @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;quad(Lnet/minecraft/client/util/math/MatrixStack$Entry;Lnet/minecraft/client/render/model/BakedQuad;FFFFII)V"))
     private static VertexConsumer Da0ne$renderBakedItemQuads(VertexConsumer receiver, MatrixStack.Entry matrixEntry, BakedQuad quad, float red, float green, float blue, float f, int i, int j){
-        if(isEnchanted.get())
-        {
-            float scale = 1.2f;
+        if(isEnchanted.get()) {
+            float scale = 1.05f;
 
             int[] vertexData = quad.getVertexData().clone();
-            Vector3f[] vertPoses = VertexHelper.getVertexPos(vertexData);
             Vec3i intVec = quad.getFace().getVector();
             Vector3f dirVec = new Vector3f(intVec.getX(), intVec.getY(), intVec.getZ());
-            dirVec.mul(scale-1f);
+            dirVec.mul(scale - 1f);
 
             Vector3f center = new Vector3f();
-            for (Vector3f vert : vertPoses) {
+            Vector3f[] dirs = VertexHelper.getVertexPos(vertexData);
+            for (Vector3f vert : dirs) {
                 center.add(vert);
             }
-            center.div(vertPoses.length);
+            center.div(dirs.length);
 
-            for(Vector3f vert : vertPoses)
-            {
-                vert.sub(center);
-                vert.mul(scale);
-                vert.add(center);
 
-                vert.add(dirVec);
+
+            Vector3f[] vertPoses = new Vector3f[dirs.length];
+
+            for(Vector3f dir : dirs){
+                //get the difference between the dirrections
+                Vector3f newDir = new Vector3f(dir);
+                newDir.sub(center);
+                newDir.mul(scale);
+                newDir.add(center);
+                //set it to teh difference
+                newDir.sub(dir);
+                for (int vertInterator = 0; vertInterator < dirs.length; vertInterator++) {
+                    Vector3f vert = new Vector3f(dirs[vertInterator]);
+
+                    vert.add(newDir);
+                    vert.add(dirVec);
+
+                    vertPoses[vertInterator] = vert;
+                }
+                VertexHelper.setVertexData(vertexData, vertPoses);
+
+                BakedQuad enchantmentQuad = new BakedQuad(vertexData, -1, quad.getFace().getOpposite(), null, false, quad.getLightEmission());
+
+                receiver.quad(matrixEntry, enchantmentQuad, 0.627f, 0.125f, 0.94f, 0.5f, 0, 0);
             }
-            VertexHelper.setVertexData(vertexData, vertPoses);
-
-            BakedQuad enchantmentQuad = new BakedQuad(vertexData, quad.getTintIndex(), quad.getFace(), quad.getSprite(), quad.hasShade(), quad.getLightEmission());
-
-            receiver.quad(matrixEntry, enchantmentQuad, 0.627f, 0.125f, 0.94f, 0.5f, i, j);
         }
         return receiver;
     }
