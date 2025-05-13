@@ -30,4 +30,16 @@ public class VertexHelper {
             outVertexData[vertStride+2] = Float.floatToIntBits(newPos[i].z);
         }
     }
+
+    public static int[] flip(int[] inVertexData)
+    {
+        int vertices = inVertexData.length/8;
+        int[] outVertextData = new int[inVertexData.length];
+        for(int i =  0; i < vertices; i++)
+        {
+            int stride = 8;
+            System.arraycopy(inVertexData, i*stride, outVertextData, (vertices-i-1) * stride, stride);
+        }
+        return outVertextData;
+    }
 }

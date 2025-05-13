@@ -2,6 +2,7 @@ package net.da0ne.betterenchants.mixin;
 
 import com.mojang.logging.LogUtils;
 import net.da0ne.betterenchants.VertexHelper;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,6 +25,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ModelTransformationMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
@@ -70,45 +72,69 @@ public class ItemRendererMixin {
     @ModifyReceiver(method = "renderBakedItemQuads", at =  @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;quad(Lnet/minecraft/client/util/math/MatrixStack$Entry;Lnet/minecraft/client/render/model/BakedQuad;FFFFII)V"))
     private static VertexConsumer Da0ne$renderBakedItemQuads(VertexConsumer receiver, MatrixStack.Entry matrixEntry, BakedQuad quad, float red, float green, float blue, float f, int i, int j){
         if(isEnchanted.get()) {
-            float scale = 1.05f;
+            float scale = 0.02f;
 
             int[] vertexData = quad.getVertexData().clone();
-            Vec3i intVec = quad.getFace().getVector();
-            Vector3f dirVec = new Vector3f(intVec.getX(), intVec.getY(), intVec.getZ());
-            dirVec.mul(scale - 1f);
+            Vector3f[] defaultVerts = VertexHelper.getVertexPos(vertexData);
 
-            Vector3f center = new Vector3f();
-            Vector3f[] dirs = VertexHelper.getVertexPos(vertexData);
-            for (Vector3f vert : dirs) {
-                center.add(vert);
-            }
-            center.div(dirs.length);
-
-
-
-            Vector3f[] vertPoses = new Vector3f[dirs.length];
-
-            for(Vector3f dir : dirs){
-                //get the difference between the dirrections
-                Vector3f newDir = new Vector3f(dir);
-                newDir.sub(center);
-                newDir.mul(scale);
-                newDir.add(center);
-                //set it to teh difference
-                newDir.sub(dir);
-                for (int vertInterator = 0; vertInterator < dirs.length; vertInterator++) {
-                    Vector3f vert = new Vector3f(dirs[vertInterator]);
-
-                    vert.add(newDir);
-                    vert.add(dirVec);
-
-                    vertPoses[vertInterator] = vert;
+            if(defaultVerts.length == 4) {
+                Vector3f center = new Vector3f();
+                for (Vector3f vert : defaultVerts) {
+                    center.add(vert);
                 }
-                VertexHelper.setVertexData(vertexData, vertPoses);
+                center.div(defaultVerts.length);
 
-                BakedQuad enchantmentQuad = new BakedQuad(vertexData, -1, quad.getFace().getOpposite(), null, false, quad.getLightEmission());
+                Vector3f corner1 = defaultVerts[0];
+                Vector3f corner2 = defaultVerts[1];
+                corner1.sub(center);
+                corner2.sub(center);
 
-                receiver.quad(matrixEntry, enchantmentQuad, 0.627f, 0.125f, 0.94f, 0.5f, 0, 0);
+                Vector3f side1 = new Vector3f(corner1);
+                side1.add(corner2);
+
+                Vector3f side2 = new Vector3f(corner1);
+                side2.sub(corner2);
+
+                side1.normalize();
+                side2.normalize();
+
+                //this is localDiagonal. We don't realocate cause that's not efficent
+                Vector3f localDiagonal = side1;
+                localDiagonal.add(side2);
+                localDiagonal.mul(scale);
+                //localDiagonal.add(corner1);
+
+                Vector3f otherLocal = new Vector3f(localDiagonal).reflect(side2);
+
+                //LogUtils.getLogger().info("localDiag: " + localDiagonal + ", side1: " + side1 + ", corner1: " + corner1 + ", center: " + center);
+
+                Vector3f[] cardinalDirs = {new Vector3f(localDiagonal), new Vector3f(otherLocal), localDiagonal.mul(-1), otherLocal.mul(-1)};
+
+                corner1.add(center);
+                corner2.add(center);
+
+                Vec3i intVec = quad.getFace().getVector();
+                Vector3f faceVec = new Vector3f(intVec.getX(), intVec.getY(), intVec.getZ());
+                faceVec.mul(scale);
+
+                Vector3f[] vertPoses = new Vector3f[defaultVerts.length];
+                for(Vector3f dir : cardinalDirs){
+
+                    for (int vertInterator = 0; vertInterator < defaultVerts.length; vertInterator++)
+                    {
+                        Vector3f vert = new Vector3f(defaultVerts[vertInterator]);
+                        vert.add(dir);
+                        vert.add(faceVec);
+                        vertPoses[vertInterator] = vert;
+                    }
+
+                    VertexHelper.setVertexData(vertexData, vertPoses);
+
+                    BakedQuad enchantmentQuad = new BakedQuad(VertexHelper.flip(vertexData), -1, quad.getFace().getOpposite(), null, false, quad.getLightEmission());
+                    //LogUtils.getLogger().info("normal: " + enchantmentQuad.getFace() + ", normalVector: " + enchantmentQuad.getFace().getVector());
+
+                    receiver.quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
+                }
             }
         }
         return receiver;
