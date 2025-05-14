@@ -19,6 +19,7 @@ public class BufferBuilderStorageMixin {
     @Inject(method = "method_54639", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilderStorage;assignBufferBuilder(Lit/unimi/dsi/fastutil/objects/Object2ObjectLinkedOpenHashMap;Lnet/minecraft/client/render/RenderLayer;)V", ordinal = 5))
     private void Da0ne$LambdaMapInject(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferAllocator> map, CallbackInfo ci)
     {
-        assignBufferBuilder(map, BetterEnchants.ourRenderLayer);
+        assignBufferBuilder(map, BetterEnchants.cutoutLayer);
+        assignBufferBuilder(map, BetterEnchants.solidLayer);
     }
 }
