@@ -3,12 +3,14 @@ package net.da0ne.betterenchants;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.client.render.*;
+import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TriState;
 import net.minecraft.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.SequencedMap;
 import java.util.function.Function;
 
 public class BetterEnchants implements ModInitializer {
@@ -34,18 +36,22 @@ public class BetterEnchants implements ModInitializer {
 					.build(true)
 	);
 
-	public static RenderLayer.MultiPhase createArmorCutout(Identifier texture) {
-		RenderLayer.MultiPhaseParameters multiPhaseParameters = RenderLayer.MultiPhaseParameters.builder()
-				.program(RenderLayer.ARMOR_CUTOUT_NO_CULL_PROGRAM)
-				.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
-				.transparency(RenderLayer.NO_TRANSPARENCY)
-				.cull(RenderLayer.DISABLE_CULLING)
-				.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-				.overlay(RenderLayer.ENABLE_OVERLAY_COLOR)
-				.layering(RenderLayer.VIEW_OFFSET_Z_LAYERING)
-				.depthTest(RenderLayer.LEQUAL_DEPTH_TEST)
-				.build(true);
-		return RenderLayer.of("armor_cutout_no_cull", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS, 1536, true, false, multiPhaseParameters);
+	private static RenderLayer createArmorRenderLayer(Identifier texture){
+		return RenderLayer.of(
+			"custom_enchants_armor",
+			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
+			VertexFormat.DrawMode.QUADS,
+			1536,
+			true,
+			false,
+			RenderLayer.MultiPhaseParameters.builder()
+					.program(RenderLayer.ARMOR_CUTOUT_NO_CULL_PROGRAM)
+					.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
+					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
+					.layering(RenderLayer.VIEW_OFFSET_Z_LAYERING)
+					.depthTest(RenderLayer.LEQUAL_DEPTH_TEST)
+					.writeMaskState(RenderLayer.DEPTH_MASK)
+					.build(true));
 	}
 
 	public static final RenderLayer solidLayer = RenderLayer.of(
@@ -63,6 +69,8 @@ public class BetterEnchants implements ModInitializer {
 					.build(true)
 	);
 
+	public static final CustomRenderLayers customRenderLayers = new CustomRenderLayers();
+
 	private static float scale = 0.02f;
 
 	public static final ThreadLocal<VertexConsumer> isEnchanted = ThreadLocal.withInitial(() -> null);
@@ -73,10 +81,22 @@ public class BetterEnchants implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		customRenderLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), cutoutLayer);
+		customRenderLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), solidLayer);
 	}
 
 	public static float getScale()
 	{
 		return scale;
+	}
+
+	public static RenderLayer getOrCreateArmorRenderLayer(Identifier identifier)
+	{
+		RenderLayer output = customRenderLayers.getCustomRenderLayer(identifier);
+		if(output != null)
+		{
+			return output;
+		}
+		return customRenderLayers.addCustomRenderLayer(identifier, createArmorRenderLayer(identifier));
 	}
 }

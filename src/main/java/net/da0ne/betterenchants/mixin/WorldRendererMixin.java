@@ -12,8 +12,10 @@ public class WorldRendererMixin {
     private VertexConsumerProvider.Immediate Da0ne$RenderMain(VertexConsumerProvider.Immediate receiver, RenderLayer layer)
     {
         //LogUtils.getLogger().info("layerDRAWN: " + layer.toString());
-        receiver.draw(BetterEnchants.cutoutLayer);
-        receiver.draw(BetterEnchants.solidLayer);
+        for(var customLayer : BetterEnchants.customRenderLayers.renderLayers())
+        {
+            receiver.draw(customLayer);
+        }
         return receiver;
     }
 }

@@ -40,13 +40,18 @@ public class EquipmentRendererMixin {
     @ModifyArgs(method = "render(Lnet/minecraft/client/render/entity/equipment/EquipmentModel$LayerType;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/client/model/Model;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/util/Identifier;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getArmorGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;Z)Lnet/minecraft/client/render/VertexConsumer;"))
     private void Da0ne$renderEntry(Args args)
     {
+
         if(textureIdentifier.get() != null)
         {
             if(args.get(2)){
+                //args.set(1, RenderLayer.getArmorCutoutNoCull(textureIdentifier.get()));
                 //LogUtils.getLogger().info("msg: " + textureIdentifier.get());
-                VertexConsumer x = ((VertexConsumerProvider)args.get(0)).getBuffer(BetterEnchants.createArmorCutout(textureIdentifier.get()));//ItemRenderer.getArmorGlintConsumer(args.get(0), BetterEnchants.createArmorCutout(textureIdentifier.get()), true);
-                //LogUtils.getLogger().info("IDK MAN: " + x);
-                BetterEnchants.isEnchanted.set(x);
+                RenderLayer layer = BetterEnchants.getOrCreateArmorRenderLayer(textureIdentifier.get());
+                if(layer != null){
+                    VertexConsumer x = ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true);
+                    BetterEnchants.isEnchanted.set(x);
+                }
+                //LogUtils.getLogger().info("IDK MAN: " + textureIdentifier.get());
             }
             textureIdentifier.remove();
         }
