@@ -3,6 +3,8 @@
 	"package": "net.da0ne.betterenchants.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
+		"WorldRendererMixin",
+		"BufferBuilderStorageMixin",
 		"ItemRendererMixin"
 	],
 	"injectors": {
