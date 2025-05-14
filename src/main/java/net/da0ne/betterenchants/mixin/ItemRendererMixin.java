@@ -1,7 +1,9 @@
 package net.da0ne.betterenchants.mixin;
 
 import com.mojang.logging.LogUtils;
+import net.da0ne.betterenchants.BetterEnchants;
 import net.da0ne.betterenchants.VertexHelper;
+import net.minecraft.client.render.VertexConsumers;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import org.joml.Vector3f;
@@ -30,7 +32,7 @@ import java.util.Arrays;
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
     @Unique
-    private static final ThreadLocal<Boolean> isEnchanted = ThreadLocal.withInitial(() -> false);
+    private static final ThreadLocal<VertexConsumer> isEnchanted = ThreadLocal.withInitial(() -> null);
     //Lnet/minecraft/client/render/VertexConsumer
     @Inject(method = "renderItem(Lnet/minecraft/item/ModelTransformationMode;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II[ILnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/render/item/ItemRenderState$Glint;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderBakedItemModel(Lnet/minecraft/client/render/model/BakedModel;[IIILnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;)V"))
     private static void Da0ne$renderItem$INVOKE(
@@ -48,7 +50,8 @@ public class ItemRendererMixin {
     {
         if(glint != Glint.NONE)
         {
-            isEnchanted.set(true);
+            //LogUtils.getLogger().info("layer: " + layer);
+            isEnchanted.set(VertexConsumers.union(vertexConsumers.getBuffer(RenderLayer.getGlint()), vertexConsumers.getBuffer(BetterEnchants.ourRenderLayer)));
         }
     }
     
@@ -66,12 +69,12 @@ public class ItemRendererMixin {
         CallbackInfo ci
     )
     {
-        isEnchanted.set(false);
+        isEnchanted.set(null);
     }
 
     @ModifyReceiver(method = "renderBakedItemQuads", at =  @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;quad(Lnet/minecraft/client/util/math/MatrixStack$Entry;Lnet/minecraft/client/render/model/BakedQuad;FFFFII)V"))
     private static VertexConsumer Da0ne$renderBakedItemQuads(VertexConsumer receiver, MatrixStack.Entry matrixEntry, BakedQuad quad, float red, float green, float blue, float f, int i, int j){
-        if(isEnchanted.get()) {
+        if(isEnchanted.get() != null) {
             float scale = 0.02f;
 
             int[] vertexData = quad.getVertexData().clone();
@@ -133,7 +136,8 @@ public class ItemRendererMixin {
                     BakedQuad enchantmentQuad = new BakedQuad(VertexHelper.flip(vertexData), -1, quad.getFace().getOpposite(), null, false, quad.getLightEmission());
                     //LogUtils.getLogger().info("normal: " + enchantmentQuad.getFace() + ", normalVector: " + enchantmentQuad.getFace().getVector());
 
-                    receiver.quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
+                    isEnchanted.get().quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
+                    //receiver.quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
                 }
             }
         }
