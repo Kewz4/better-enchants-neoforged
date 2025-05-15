@@ -21,7 +21,7 @@ public class ModelPart_CuboidMixin {
     @Final
     public ModelPart.Quad[] sides;
 
-    @Inject(method = "renderCuboid", at = @At("RETURN"))
+    @Inject(method = "renderCuboid", at = @At("HEAD"))
     private void Da0ne$renderCuboid(MatrixStack.Entry entry, VertexConsumer vertexConsumer, int light, int overlay, int color, CallbackInfo ci)
     {
         if(!BetterEnchants.getConfig().getEnabled())

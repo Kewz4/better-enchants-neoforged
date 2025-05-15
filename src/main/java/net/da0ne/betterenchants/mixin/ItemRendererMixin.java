@@ -6,13 +6,13 @@ import net.minecraft.util.math.Vec3i;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.util.math.MatrixStack;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.List;
 
@@ -57,8 +57,17 @@ public class ItemRendererMixin {
         BetterEnchants.isEnchanted.set(null);
     }*/
 
-    @Inject(method = "renderBakedItemQuads", at = @At("RETURN"))//value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;quad(Lnet/minecraft/client/util/math/MatrixStack$Entry;Lnet/minecraft/client/render/model/BakedQuad;FFFFII)V"))
-    private static void Da0ne$renderBakedItemQuads(MatrixStack matrices, VertexConsumer vertexConsumer, List<BakedQuad> quads, int[] tints, int light, int overlay, CallbackInfo ci){
+    @ModifyArgs(method = "renderBakedItemModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderBakedItemQuads(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Ljava/util/List;[III)V"))//value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;quad(Lnet/minecraft/client/util/math/MatrixStack$Entry;Lnet/minecraft/client/render/model/BakedQuad;FFFFII)V"))
+    private static void Da0ne$renderBakedItemQuads(Args args){
+
+        MatrixStack matrices = args.get(0);
+        VertexConsumer vertexConsumer = args.get(1);
+        List<BakedQuad> quads = args.get(2);
+        int[] tints  = args.get(3);
+        int light = args.get(4);
+        int overlay = args.get(5);
+        //CallbackInfo ci;
+        //LogUtils.getLogger().info("Do we even make it here");
         if(!BetterEnchants.getConfig().getEnabled())
         {
             return;
