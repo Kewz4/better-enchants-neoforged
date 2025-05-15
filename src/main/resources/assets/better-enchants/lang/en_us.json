@@ -18,7 +18,10 @@
 
   "tooltip.betterenchants.render.enabled": "Toggles all rendering.",
   "tooltip.betterenchants.render.size": "The size of the outline effect. Some arbitrary units.",
-  "tooltip.betterenchants.armor.render": "Whether or not to render the effect on worn armor.",
+
+  "tooltip.betterenchants.armor.render.line1": "Whether or not to render the effect on worn armor.",
+  "tooltip.betterenchants.armor.render.line2": "Implementation is not stable. Disable this if you have frequent crashes",
+
   "tooltip.betterenchants.armor.originaluv": "If we should use the original UV of the armor. Otherwise we default to the UV specified in the config. Useful for noisy or broken uvs",
   "tooltip.betterenchants.armor.doubleside": "Whether to render an outline on the inside of the helmet. You may want to disable this with some mods or resource packs.",
   "tooltip.betterenchants.special.render": "Whether or not to render the effect special items. Special items are items which call separate render code (eg. trident, shulker box, shield).",

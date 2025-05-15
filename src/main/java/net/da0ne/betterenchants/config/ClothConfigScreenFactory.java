@@ -6,6 +6,7 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.da0ne.betterenchants.BetterEnchants;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class ClothConfigScreenFactory {
     public static Screen makeConfig(Screen parent)
@@ -32,8 +33,8 @@ public class ClothConfigScreenFactory {
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().outline_size = newValue)
                 .build());
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.render"), BetterEnchants.getConfig().shouldRenderArmor())
-                .setDefaultValue(true)
-                .setTooltip(Text.translatable("tooltip.betterenchants.armor.render"))
+                .setDefaultValue(false)
+                .setTooltip(Text.translatable("tooltip.betterenchants.armor.render.line1").append("\n").append(Text.translatable("tooltip.betterenchants.armor.render.line2").formatted(Formatting.RED)))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().effect_armor = newValue)
                 .build());
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.originaluv"), BetterEnchants.getConfig().use_original_armor_uv)

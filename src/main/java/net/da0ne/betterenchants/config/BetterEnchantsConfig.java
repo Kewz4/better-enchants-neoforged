@@ -20,7 +20,7 @@ public class BetterEnchantsConfig {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public boolean enabled = true;
-    public boolean effect_armor = true;
+    public boolean effect_armor = false;
     public boolean effect_special_item = true;
     public boolean armor_double_sided = true;
     public boolean use_original_armor_uv = true;
