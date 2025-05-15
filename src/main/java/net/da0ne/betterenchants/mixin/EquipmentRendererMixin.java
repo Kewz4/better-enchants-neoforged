@@ -1,12 +1,9 @@
 package net.da0ne.betterenchants.mixin;
 
-import com.mojang.logging.LogUtils;
 import net.da0ne.betterenchants.BetterEnchants;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.VertexConsumers;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -40,18 +37,14 @@ public class EquipmentRendererMixin {
     @ModifyArgs(method = "render(Lnet/minecraft/client/render/entity/equipment/EquipmentModel$LayerType;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/client/model/Model;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/util/Identifier;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getArmorGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;Z)Lnet/minecraft/client/render/VertexConsumer;"))
     private void Da0ne$renderEntry(Args args)
     {
-
         if(textureIdentifier.get() != null)
         {
             if(args.get(2)){
-                //args.set(1, RenderLayer.getArmorCutoutNoCull(textureIdentifier.get()));
-                //LogUtils.getLogger().info("msg: " + textureIdentifier.get());
                 RenderLayer layer = BetterEnchants.getOrCreateArmorRenderLayer(textureIdentifier.get());
                 if(layer != null){
                     BetterEnchants.isArmor.set(true);
                     BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true));
                 }
-                //LogUtils.getLogger().info("IDK MAN: " + textureIdentifier.get());
             }
             textureIdentifier.remove();
         }

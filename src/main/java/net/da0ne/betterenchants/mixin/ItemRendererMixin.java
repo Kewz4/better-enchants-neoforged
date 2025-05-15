@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.util.math.MatrixStack;
@@ -18,56 +17,12 @@ import java.util.List;
 
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
-    //Lnet/minecraft/client/render/VertexConsumer
-    /*@Inject(method = "renderItem(Lnet/minecraft/item/ModelTransformationMode;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II[ILnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/render/item/ItemRenderState$Glint;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderBakedItemModel(Lnet/minecraft/client/render/model/BakedModel;[IIILnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;)V"))
-    private static void Da0ne$renderItem$INVOKE(
-        ModelTransformationMode transformationMode,
-		MatrixStack matrices,
-		VertexConsumerProvider vertexConsumers,
-		int light,
-		int overlay,
-		int[] tints,
-		BakedModel model,
-		RenderLayer layer,
-		ItemRenderState.Glint glint,
-        CallbackInfo ci
-    )
-    {
-        if(glint != Glint.NONE)
-        {
-            //LogUtils.getLogger().info("layer: " + layer);
-            BetterEnchants.isEnchanted.set(BetterEnchants.createOutlineVertexConsumer(vertexConsumers));
-        }
-    }
-    
-    @Inject(method = "renderItem(Lnet/minecraft/item/ModelTransformationMode;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II[ILnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/render/item/ItemRenderState$Glint;)V", at = @At(value = "RETURN"))
-    private static void Da0ne$renderItem$Return(
-        ModelTransformationMode transformationMode,
-		MatrixStack matrices,
-		VertexConsumerProvider vertexConsumers,
-		int light,
-		int overlay,
-		int[] tints,
-		BakedModel model,
-		RenderLayer layer,
-		ItemRenderState.Glint glint,
-        CallbackInfo ci
-    )
-    {
-        BetterEnchants.isEnchanted.set(null);
-    }*/
-
     @ModifyArgs(method = "renderBakedItemModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderBakedItemQuads(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Ljava/util/List;[III)V"))//value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;quad(Lnet/minecraft/client/util/math/MatrixStack$Entry;Lnet/minecraft/client/render/model/BakedQuad;FFFFII)V"))
     private static void Da0ne$renderBakedItemQuads(Args args){
 
         MatrixStack matrices = args.get(0);
-        VertexConsumer vertexConsumer = args.get(1);
         List<BakedQuad> quads = args.get(2);
-        int[] tints  = args.get(3);
-        int light = args.get(4);
-        int overlay = args.get(5);
-        //CallbackInfo ci;
-        //LogUtils.getLogger().info("Do we even make it here");
+
         if(!BetterEnchants.getConfig().getEnabled())
         {
             return;
@@ -93,10 +48,8 @@ public class ItemRendererMixin {
                         VertexHelper.setVertexData(vertexData, vertPoses);
 
                         BakedQuad enchantmentQuad = new BakedQuad(VertexHelper.flip(vertexData), -1, quad.getFace().getOpposite(), null, false, quad.getLightEmission());
-                        //LogUtils.getLogger().info("normal: " + enchantmentQuad.getFace() + ", normalVector: " + enchantmentQuad.getFace().getVector());
 
                         BetterEnchants.isEnchanted.get().quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
-                        //receiver.quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
                     }
                 }
             }
