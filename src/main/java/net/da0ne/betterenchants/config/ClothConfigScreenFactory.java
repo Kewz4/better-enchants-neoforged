@@ -53,7 +53,7 @@ public class ClothConfigScreenFactory {
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().effect_special_item = newValue)
                 .build());
         special.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.special.originaluv"), BetterEnchants.getConfig().use_original_special_item_uv)
-                .setDefaultValue(true)
+                .setDefaultValue(false)
                 .setTooltip(Text.translatable("tooltip.betterenchants.special.originaluv"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().use_original_special_item_uv = newValue)
                 .build());
