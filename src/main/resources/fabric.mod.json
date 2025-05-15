@@ -3,7 +3,7 @@
 	"id": "better-enchants",
 	"version": "${version}",
 	"name": "Better Enchants",
-	"description": "Adds a fancy enchantment outline to enchanted items. Works with resource packs and shaders.",
+	"description": "Adds a fancy enchantment outline to enchanted items. Works with resource packs and shaders. Sodium compatible",
 	"authors": [
 		"Da0neDatGotAway"
 	],

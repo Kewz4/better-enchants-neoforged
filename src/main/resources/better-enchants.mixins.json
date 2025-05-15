@@ -3,6 +3,7 @@
 	"package": "net.da0ne.betterenchants.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
+		"TridentEntityRendererMixin",
 		"VertexConsumerProvider_ImmediateMixin",
 		"EquipmentRendererMixin",
 		"ModelPart_CuboidMixin",
