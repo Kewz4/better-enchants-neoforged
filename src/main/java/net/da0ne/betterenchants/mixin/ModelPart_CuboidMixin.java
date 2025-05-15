@@ -1,8 +1,7 @@
 package net.da0ne.betterenchants.mixin;
 
-import com.mojang.logging.LogUtils;
 import net.da0ne.betterenchants.BetterEnchants;
-import net.da0ne.betterenchants.VertexHelper;
+import net.da0ne.betterenchants.util.VertexHelper;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.model.BakedQuad;
@@ -25,14 +24,18 @@ public class ModelPart_CuboidMixin {
     @Inject(method = "renderCuboid", at = @At("RETURN"))
     private void Da0ne$renderCuboid(MatrixStack.Entry entry, VertexConsumer vertexConsumer, int light, int overlay, int color, CallbackInfo ci)
     {
+        if(!BetterEnchants.getConfig().getEnabled())
+        {
+            return;
+        }
         if(BetterEnchants.isEnchanted.get() != null){
 
             boolean isArmor = BetterEnchants.isArmor.get();
-            if((isArmor && !BetterEnchants.shouldRenderArmor()) || (!isArmor && !BetterEnchants.shouldRenderSpecialItems()))
+            if((isArmor && !BetterEnchants.getConfig().shouldRenderArmor()) || (!isArmor && !BetterEnchants.getConfig().shouldRenderSpecialItems()))
             {
                 return;
             }
-            float scale = BetterEnchants.getScale();
+            float scale = BetterEnchants.getConfig().getScale();
 
             for(var quad : sides)
             {
@@ -57,7 +60,7 @@ public class ModelPart_CuboidMixin {
                         int[] vertexData = new int[vertPoses.length*8];
                         for(int i = 0; i < vertPoses.length; i++)
                         {
-                            float[] uvs = BetterEnchants.getCustomOrCurrentUV(verts[i].u(), verts[i].v(), isArmor);
+                            float[] uvs = BetterEnchants.getConfig().getCustomOrCurrentUV(verts[i].u(), verts[i].v(), isArmor);
                             VertexHelper.packVertexData(vertexData, i, vertPoses[i], uvs[0], uvs[1]);
                         }
 
@@ -70,7 +73,7 @@ public class ModelPart_CuboidMixin {
                         //receiver.quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
                     }
 
-                    if(isArmor && BetterEnchants.renderArmorDoubleSided())
+                    if(isArmor && BetterEnchants.getConfig().renderArmorDoubleSided())
                     {
                         faceVec.mul(-1);
                         for(Vector3f dir : cardinalDirs)
@@ -80,7 +83,7 @@ public class ModelPart_CuboidMixin {
                             int[] vertexData = new int[vertPoses.length*8];
                             for(int i = 0; i < vertPoses.length; i++)
                             {
-                                float[] uvs = BetterEnchants.getCustomOrCurrentUV(verts[i].u(), verts[i].v(), isArmor);
+                                float[] uvs = BetterEnchants.getConfig().getCustomOrCurrentUV(verts[i].u(), verts[i].v(), isArmor);
                                 VertexHelper.packVertexData(vertexData, i, vertPoses[i], uvs[0], uvs[1]);
                             }
                             BakedQuad enchantmentQuad = new BakedQuad(vertexData, -1, Direction.fromVector((int)quad.direction().x, (int)quad.direction().y, (int)quad.direction().z, Direction.NORTH), null, false, light);

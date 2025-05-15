@@ -3,7 +3,7 @@
 	"id": "better-enchants",
 	"version": "${version}",
 	"name": "Better Enchants",
-	"description": "Adds a fancy enchantment outline to enchanted items",
+	"description": "Adds a fancy enchantment outline to enchanted items. Works with resource packs and shaders.",
 	"authors": [
 		"Da0neDatGotAway"
 	],
@@ -17,6 +17,9 @@
 	"entrypoints": {
 		"main": [
 			"net.da0ne.betterenchants.BetterEnchants"
+		],
+		"modmenu": [
+			"net.da0ne.betterenchants.ModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -29,6 +32,7 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"modmenu": "*",
+		"cloth-config": "*"
 	}
 }

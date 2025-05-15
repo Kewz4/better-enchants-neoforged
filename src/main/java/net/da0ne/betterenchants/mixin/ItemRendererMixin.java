@@ -1,26 +1,18 @@
 package net.da0ne.betterenchants.mixin;
 
 import net.da0ne.betterenchants.BetterEnchants;
-import net.da0ne.betterenchants.VertexHelper;
-import net.minecraft.client.render.VertexConsumers;
+import net.da0ne.betterenchants.util.VertexHelper;
 import net.minecraft.util.math.Vec3i;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.item.ItemRenderState.Glint;
-import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ModelTransformationMode;
 
 import java.util.List;
 
@@ -67,8 +59,12 @@ public class ItemRendererMixin {
 
     @Inject(method = "renderBakedItemQuads", at = @At("RETURN"))//value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;quad(Lnet/minecraft/client/util/math/MatrixStack$Entry;Lnet/minecraft/client/render/model/BakedQuad;FFFFII)V"))
     private static void Da0ne$renderBakedItemQuads(MatrixStack matrices, VertexConsumer vertexConsumer, List<BakedQuad> quads, int[] tints, int light, int overlay, CallbackInfo ci){
+        if(!BetterEnchants.getConfig().getEnabled())
+        {
+            return;
+        }
         if(BetterEnchants.isEnchanted.get() != null) {
-            float scale = BetterEnchants.getScale();
+            float scale = BetterEnchants.getConfig().getScale();
             MatrixStack.Entry matrixEntry = matrices.peek();
 
             for (BakedQuad quad : quads) {

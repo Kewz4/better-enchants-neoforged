@@ -1,7 +1,6 @@
-package net.da0ne.betterenchants;
+package net.da0ne.betterenchants.util;
 
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
 
 import java.util.*;

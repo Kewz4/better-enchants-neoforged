@@ -1,5 +1,7 @@
 package net.da0ne.betterenchants;
 
+import net.da0ne.betterenchants.config.BetterEnchantsConfig;
+import net.da0ne.betterenchants.util.CustomRenderLayers;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.client.render.*;
@@ -7,6 +9,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.TriState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class BetterEnchants implements ModInitializer {
 	public static final String MOD_ID = "better-enchants";
@@ -69,14 +75,12 @@ public class BetterEnchants implements ModInitializer {
 
 	public static final CustomRenderLayers customRenderLayers = new CustomRenderLayers();
 
-	private static boolean effectArmor = true;
-	private static boolean effectSpecialItem = true;
-	private static boolean armorDoubleSided = true;
-	private static boolean armorOriginalUV = false;
-	private static boolean specialItemOriginalUV = false;
-	private static float[] customUV = {0,0};
+	private static BetterEnchantsConfig config;
 
-	private static float scale = 0.02f;
+	public static BetterEnchantsConfig getConfig()
+	{
+		return config;
+	}
 
 	public static final ThreadLocal<VertexConsumer> isEnchanted = ThreadLocal.withInitial(() -> null);
 	public static final ThreadLocal<Boolean> isArmor = ThreadLocal.withInitial(() -> false);
@@ -87,51 +91,9 @@ public class BetterEnchants implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		loadConfig();
 		customRenderLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), cutoutLayer);
 		customRenderLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), solidLayer);
-	}
-
-	public static float getScale()
-	{
-		return scale;
-	}
-
-	public static boolean useOriginalUVs(boolean isArmor)
-	{
-		if(isArmor)
-		{
-			return armorOriginalUV;
-		}
-		return specialItemOriginalUV;
-	}
-
-	public static float[] getCustomUVs()
-	{
-		return customUV;
-	}
-
-	public static float[] getCustomOrCurrentUV(float u, float v, boolean isArmor)
-	{
-		if(!useOriginalUVs(isArmor))
-		{
-			return getCustomUVs();
-		}
-        return new float[]{u,v};
-	}
-
-	public static boolean renderArmorDoubleSided()
-	{
-		return armorDoubleSided;
-	}
-
-	public static boolean shouldRenderArmor()
-	{
-		return effectArmor;
-	}
-
-	public static boolean shouldRenderSpecialItems()
-	{
-		return effectSpecialItem;
 	}
 
 	public static RenderLayer getOrCreateArmorRenderLayer(Identifier identifier)
@@ -142,5 +104,22 @@ public class BetterEnchants implements ModInitializer {
 			return output;
 		}
 		return customRenderLayers.addCustomRenderLayer(identifier, createArmorRenderLayer(identifier));
+	}
+
+	private static void loadConfig() {
+		Path configFile = BetterEnchantsConfig.CONFIG_FILE;
+		if (Files.exists(configFile)) {
+			try(BufferedReader reader = Files.newBufferedReader(configFile)) {
+				config = BetterEnchantsConfig.fromJson(reader);
+			} catch (Exception e) {
+				LOGGER.error("Error loading WebSpeak config file. Default values will be used for this session.", e);
+				config = new BetterEnchantsConfig();
+			}
+		} else {
+			config = new BetterEnchantsConfig();
+		}
+
+		// Immedietly save config to file to update any fields that may have changed.
+		config.saveAsync();
 	}
 }
