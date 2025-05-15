@@ -3,15 +3,10 @@ package net.da0ne.betterenchants;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.client.render.*;
-import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TriState;
-import net.minecraft.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.SequencedMap;
-import java.util.function.Function;
 
 public class BetterEnchants implements ModInitializer {
 	public static final String MOD_ID = "better-enchants";
@@ -74,13 +69,17 @@ public class BetterEnchants implements ModInitializer {
 
 	public static final CustomRenderLayers customRenderLayers = new CustomRenderLayers();
 
-	private static boolean originalUV = true;
+	private static boolean effectArmor = true;
+	private static boolean effectSpecialItem = true;
+	private static boolean armorDoubleSided = true;
+	private static boolean armorOriginalUV = false;
+	private static boolean specialItemOriginalUV = false;
 	private static float[] customUV = {0,0};
 
 	private static float scale = 0.02f;
 
 	public static final ThreadLocal<VertexConsumer> isEnchanted = ThreadLocal.withInitial(() -> null);
-	public static final ThreadLocal<Boolean> renderDoubleSided = ThreadLocal.withInitial(() -> false);
+	public static final ThreadLocal<Boolean> isArmor = ThreadLocal.withInitial(() -> false);
 
 	@Override
 	public void onInitialize() {
@@ -97,14 +96,42 @@ public class BetterEnchants implements ModInitializer {
 		return scale;
 	}
 
-	public static boolean useOriginalUVs()
+	public static boolean useOriginalUVs(boolean isArmor)
 	{
-		return originalUV;
+		if(isArmor)
+		{
+			return armorOriginalUV;
+		}
+		return specialItemOriginalUV;
 	}
 
 	public static float[] getCustomUVs()
 	{
 		return customUV;
+	}
+
+	public static float[] getCustomOrCurrentUV(float u, float v, boolean isArmor)
+	{
+		if(!useOriginalUVs(isArmor))
+		{
+			return getCustomUVs();
+		}
+        return new float[]{u,v};
+	}
+
+	public static boolean renderArmorDoubleSided()
+	{
+		return armorDoubleSided;
+	}
+
+	public static boolean shouldRenderArmor()
+	{
+		return effectArmor;
+	}
+
+	public static boolean shouldRenderSpecialItems()
+	{
+		return effectSpecialItem;
 	}
 
 	public static RenderLayer getOrCreateArmorRenderLayer(Identifier identifier)

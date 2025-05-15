@@ -27,6 +27,11 @@ public class ModelPart_CuboidMixin {
     {
         if(BetterEnchants.isEnchanted.get() != null){
 
+            boolean isArmor = BetterEnchants.isArmor.get();
+            if((isArmor && !BetterEnchants.shouldRenderArmor()) || (!isArmor && !BetterEnchants.shouldRenderSpecialItems()))
+            {
+                return;
+            }
             float scale = BetterEnchants.getScale();
 
             for(var quad : sides)
@@ -52,8 +57,8 @@ public class ModelPart_CuboidMixin {
                         int[] vertexData = new int[vertPoses.length*8];
                         for(int i = 0; i < vertPoses.length; i++)
                         {
-                            //0, 0 as UV look better, but should be less accurate. They are not less accurate cause I have no idea how minecraft rendering works
-                            VertexHelper.packVertexData(vertexData, i, vertPoses[i], verts[i].u(), verts[i].v());
+                            float[] uvs = BetterEnchants.getCustomOrCurrentUV(verts[i].u(), verts[i].v(), isArmor);
+                            VertexHelper.packVertexData(vertexData, i, vertPoses[i], uvs[0], uvs[1]);
                         }
 
                         BakedQuad enchantmentQuad = new BakedQuad(VertexHelper.flip(vertexData), -1, Direction.fromVector((int)quad.direction().x, (int)quad.direction().y, (int)quad.direction().z, Direction.NORTH), null, false, light);
@@ -65,7 +70,7 @@ public class ModelPart_CuboidMixin {
                         //receiver.quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
                     }
 
-                    if(BetterEnchants.renderDoubleSided.get())
+                    if(isArmor && BetterEnchants.renderArmorDoubleSided())
                     {
                         faceVec.mul(-1);
                         for(Vector3f dir : cardinalDirs)
@@ -75,8 +80,8 @@ public class ModelPart_CuboidMixin {
                             int[] vertexData = new int[vertPoses.length*8];
                             for(int i = 0; i < vertPoses.length; i++)
                             {
-                                //0, 0 as UV look better, but should be less accurate. They are not less accurate cause I have no idea how minecraft rendering works
-                                VertexHelper.packVertexData(vertexData, i, vertPoses[i], verts[i].u(), verts[i].v());
+                                float[] uvs = BetterEnchants.getCustomOrCurrentUV(verts[i].u(), verts[i].v(), isArmor);
+                                VertexHelper.packVertexData(vertexData, i, vertPoses[i], uvs[0], uvs[1]);
                             }
                             BakedQuad enchantmentQuad = new BakedQuad(vertexData, -1, Direction.fromVector((int)quad.direction().x, (int)quad.direction().y, (int)quad.direction().z, Direction.NORTH), null, false, light);
                             BetterEnchants.isEnchanted.get().quad(entry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);

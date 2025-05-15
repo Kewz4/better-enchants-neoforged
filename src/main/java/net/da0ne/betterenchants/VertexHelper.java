@@ -1,5 +1,6 @@
 package net.da0ne.betterenchants;
 
+import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.render.model.json.ModelElementTexture;
@@ -90,6 +91,11 @@ public class VertexHelper {
     public static Vector3f[] growFace(Vector3f[] defaultVerts, Vector3f cardinalDir, Vector3f scaledNormal)
     {
         Vector3f[] vertPoses = new Vector3f[defaultVerts.length];
+        Vector3f normalizedNormal = new Vector3f(scaledNormal);
+        normalizedNormal.normalize();
+        normalizedNormal.mul(0.0001f);
+        scaledNormal.add(normalizedNormal);
+
         for (int vertInterator = 0; vertInterator < defaultVerts.length; vertInterator++) {
             Vector3f vert = new Vector3f(defaultVerts[vertInterator]);
             vert.add(scaledNormal);

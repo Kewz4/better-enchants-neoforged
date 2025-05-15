@@ -48,7 +48,7 @@ public class EquipmentRendererMixin {
                 //LogUtils.getLogger().info("msg: " + textureIdentifier.get());
                 RenderLayer layer = BetterEnchants.getOrCreateArmorRenderLayer(textureIdentifier.get());
                 if(layer != null){
-                    BetterEnchants.renderDoubleSided.set(true);
+                    BetterEnchants.isArmor.set(true);
                     BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true));
                 }
                 //LogUtils.getLogger().info("IDK MAN: " + textureIdentifier.get());
@@ -60,7 +60,7 @@ public class EquipmentRendererMixin {
     @Inject(method = "render(Lnet/minecraft/client/render/entity/equipment/EquipmentModel$LayerType;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/client/model/Model;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/util/Identifier;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"))
     private void Da0ne$renderEntry(EquipmentModel.LayerType layerType, RegistryKey<EquipmentAsset> assetKey, Model model, ItemStack stack, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, @Nullable Identifier texture, CallbackInfo ci)
     {
-        BetterEnchants.renderDoubleSided.remove();
+        BetterEnchants.isArmor.remove();
         BetterEnchants.isEnchanted.remove();
     }
 }
