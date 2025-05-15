@@ -1,7 +1,10 @@
 package net.da0ne.betterenchants;
 
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.render.model.json.ModelElementTexture;
 import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Vector3f;
 
 public class VertexHelper {

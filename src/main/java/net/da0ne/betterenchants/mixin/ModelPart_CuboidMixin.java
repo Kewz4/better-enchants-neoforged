@@ -1,5 +1,6 @@
 package net.da0ne.betterenchants.mixin;
 
+import com.mojang.logging.LogUtils;
 import net.da0ne.betterenchants.BetterEnchants;
 import net.da0ne.betterenchants.VertexHelper;
 import net.minecraft.client.model.ModelPart;
@@ -45,6 +46,7 @@ public class ModelPart_CuboidMixin {
                 if (cardinalDirs != null) {
                     for (Vector3f dir : cardinalDirs) {
 
+
                         Vector3f[] vertPoses = VertexHelper.growFace(defaultVerts, dir, faceVec);
 
                         int[] vertexData = new int[vertPoses.length*8];
@@ -58,7 +60,27 @@ public class ModelPart_CuboidMixin {
                         //LogUtils.getLogger().info("normal: " + enchantmentQuad.getFace() + ", normalVector: " + enchantmentQuad.getFace().getVector());
 
                         BetterEnchants.isEnchanted.get().quad(entry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
+
+
                         //receiver.quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
+                    }
+
+                    if(BetterEnchants.renderDoubleSided.get())
+                    {
+                        faceVec.mul(-1);
+                        for(Vector3f dir : cardinalDirs)
+                        {
+                            Vector3f[] vertPoses = VertexHelper.growFace(defaultVerts, dir, faceVec);
+
+                            int[] vertexData = new int[vertPoses.length*8];
+                            for(int i = 0; i < vertPoses.length; i++)
+                            {
+                                //0, 0 as UV look better, but should be less accurate. They are not less accurate cause I have no idea how minecraft rendering works
+                                VertexHelper.packVertexData(vertexData, i, vertPoses[i], verts[i].u(), verts[i].v());
+                            }
+                            BakedQuad enchantmentQuad = new BakedQuad(vertexData, -1, Direction.fromVector((int)quad.direction().x, (int)quad.direction().y, (int)quad.direction().z, Direction.NORTH), null, false, light);
+                            BetterEnchants.isEnchanted.get().quad(entry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
+                        }
                     }
                 }
             }

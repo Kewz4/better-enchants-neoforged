@@ -33,6 +33,7 @@ public class BetterEnchants implements ModInitializer {
 					.program(RenderLayer.CUTOUT_PROGRAM)
 					.writeMaskState(RenderLayer.DEPTH_MASK)
 					.texture(RenderLayer.BLOCK_ATLAS_TEXTURE)
+					.cull(RenderLayer.ENABLE_CULLING)
 					.build(true)
 	);
 
@@ -46,11 +47,13 @@ public class BetterEnchants implements ModInitializer {
 			false,
 			RenderLayer.MultiPhaseParameters.builder()
 					.program(RenderLayer.ARMOR_CUTOUT_NO_CULL_PROGRAM)
+					.cull(RenderLayer.ENABLE_CULLING)
 					.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
 					.layering(RenderLayer.VIEW_OFFSET_Z_LAYERING)
 					.depthTest(RenderLayer.LEQUAL_DEPTH_TEST)
 					.writeMaskState(RenderLayer.DEPTH_MASK)
+					.cull(RenderLayer.ENABLE_CULLING)
 					.build(true));
 	}
 
@@ -71,9 +74,13 @@ public class BetterEnchants implements ModInitializer {
 
 	public static final CustomRenderLayers customRenderLayers = new CustomRenderLayers();
 
+	private static boolean originalUV = true;
+	private static float[] customUV = {0,0};
+
 	private static float scale = 0.02f;
 
 	public static final ThreadLocal<VertexConsumer> isEnchanted = ThreadLocal.withInitial(() -> null);
+	public static final ThreadLocal<Boolean> renderDoubleSided = ThreadLocal.withInitial(() -> false);
 
 	@Override
 	public void onInitialize() {
@@ -88,6 +95,16 @@ public class BetterEnchants implements ModInitializer {
 	public static float getScale()
 	{
 		return scale;
+	}
+
+	public static boolean useOriginalUVs()
+	{
+		return originalUV;
+	}
+
+	public static float[] getCustomUVs()
+	{
+		return customUV;
 	}
 
 	public static RenderLayer getOrCreateArmorRenderLayer(Identifier identifier)
