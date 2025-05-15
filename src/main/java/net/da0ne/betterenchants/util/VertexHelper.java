@@ -66,11 +66,8 @@ public class VertexHelper {
             Vector3f localDiagonal = side1;
             localDiagonal.add(side2);
             localDiagonal.mul(scale);
-            //localDiagonal.add(corner1);
 
             Vector3f otherLocal = new Vector3f(localDiagonal).reflect(side2);
-
-            //LogUtils.getLogger().info("localDiag: " + localDiagonal + ", side1: " + side1 + ", corner1: " + corner1 + ", center: " + center);
 
             Vector3f[] cardinalDirs = {new Vector3f(localDiagonal), new Vector3f(otherLocal), localDiagonal.mul(-1), otherLocal.mul(-1)};
 

@@ -6,6 +6,7 @@ import net.da0ne.betterenchants.BetterEnchants;
 import net.da0ne.betterenchants.mixin_acessors.VertexConsumerProvider_ImmediateAcessor;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.BufferAllocator;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,15 +23,22 @@ public class BufferBuilderStorageMixin {
         VertexConsumerProvider_ImmediateAcessor originalCast = ((VertexConsumerProvider_ImmediateAcessor)original);
         var enchantGlintLayer = RenderLayer.getArmorEntityGlint();
         var buffers = originalCast.Da0ne$getLayerBuffers();
-        if(originalCast.Da0ne$getDirty() != BetterEnchants.customRenderLayers.getDirty() && buffers.containsKey(enchantGlintLayer)){
-            originalCast.Da0ne$setDirty(BetterEnchants.customRenderLayers.getDirty());
+        if(originalCast.Da0ne$getDirty() != BetterEnchants.enchantmentMaskLayers.getDirty() && buffers.containsKey(enchantGlintLayer)){
+            originalCast.Da0ne$setDirty(BetterEnchants.enchantmentMaskLayers.getDirty());
             SequencedMap<RenderLayer, BufferAllocator> clonedBuffer = new Object2ObjectLinkedOpenHashMap<>(buffers);
             buffers.clear();
             for(var set : clonedBuffer.entrySet())
             {
+                if(set.getKey() == TexturedRenderLayers.getEntitySolid())
+                {
+                    for(RenderLayer layer : BetterEnchants.solidOutlineLayers.renderLayers())
+                    {
+                        buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
+                    }
+                }
                 if(set.getKey() == enchantGlintLayer)
                 {
-                    for(RenderLayer layer : BetterEnchants.customRenderLayers.renderLayers())
+                    for(RenderLayer layer : BetterEnchants.enchantmentMaskLayers.renderLayers())
                     {
                         buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
                     }

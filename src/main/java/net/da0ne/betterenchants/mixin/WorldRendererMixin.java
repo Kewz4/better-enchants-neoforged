@@ -9,9 +9,19 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
     @ModifyReceiver(method = "method_62214", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;draw(Lnet/minecraft/client/render/RenderLayer;)V", ordinal = 13))
-    private VertexConsumerProvider.Immediate Da0ne$RenderMain(VertexConsumerProvider.Immediate receiver, RenderLayer layer)
+    private VertexConsumerProvider.Immediate Da0ne$RenderMainArmor(VertexConsumerProvider.Immediate receiver, RenderLayer layer)
     {
-        for(var customLayer : BetterEnchants.customRenderLayers.renderLayers())
+        for(var customLayer : BetterEnchants.enchantmentMaskLayers.renderLayers())
+        {
+            receiver.draw(customLayer);
+        }
+        return receiver;
+    }
+
+    @ModifyReceiver(method = "method_62214", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;draw(Lnet/minecraft/client/render/RenderLayer;)V", ordinal = 3))
+    private VertexConsumerProvider.Immediate Da0ne$RenderMainItemTranslucent(VertexConsumerProvider.Immediate receiver, RenderLayer layer)
+    {
+        for(var customLayer : BetterEnchants.solidOutlineLayers.renderLayers())
         {
             receiver.draw(customLayer);
         }

@@ -37,6 +37,7 @@ public class ModelPart_CuboidMixin {
             }
             float scale = BetterEnchants.getConfig().getScale();
 
+            float[] outlineColor = BetterEnchants.getConfig().getOutlineColor();
             for(var quad : sides)
             {
                 var verts = quad.vertices();
@@ -64,9 +65,9 @@ public class ModelPart_CuboidMixin {
                             VertexHelper.packVertexData(vertexData, i, vertPoses[i], uvs[0], uvs[1]);
                         }
 
-                        BakedQuad enchantmentQuad = new BakedQuad(VertexHelper.flip(vertexData), -1, Direction.fromVector((int)quad.direction().x, (int)quad.direction().y, (int)quad.direction().z, Direction.NORTH), null, false, light);
+                        BakedQuad enchantmentQuad = new BakedQuad(VertexHelper.flip(vertexData), -1, Direction.fromVector((int)quad.direction().x, (int)quad.direction().y, (int)quad.direction().z, Direction.NORTH), null, false, 100);
 
-                        BetterEnchants.isEnchanted.get().quad(entry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
+                        BetterEnchants.isEnchanted.get().quad(entry, enchantmentQuad, outlineColor[0], outlineColor[1], outlineColor[2], 1, 0, 0);
                     }
 
                     if(isArmor && BetterEnchants.getConfig().renderArmorDoubleSided())
@@ -82,8 +83,8 @@ public class ModelPart_CuboidMixin {
                                 float[] uvs = BetterEnchants.getConfig().getCustomOrCurrentUV(verts[i].u(), verts[i].v(), isArmor);
                                 VertexHelper.packVertexData(vertexData, i, vertPoses[i], uvs[0], uvs[1]);
                             }
-                            BakedQuad enchantmentQuad = new BakedQuad(vertexData, -1, Direction.fromVector((int)quad.direction().x, (int)quad.direction().y, (int)quad.direction().z, Direction.NORTH), null, false, light);
-                            BetterEnchants.isEnchanted.get().quad(entry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
+                            BakedQuad enchantmentQuad = new BakedQuad(vertexData, -1, Direction.fromVector((int)quad.direction().x, (int)quad.direction().y, (int)quad.direction().z, Direction.NORTH), null, false, 100);
+                            BetterEnchants.isEnchanted.get().quad(entry, enchantmentQuad, outlineColor[0], outlineColor[1], outlineColor[2], 1, 0, 0);
                         }
                     }
                 }

@@ -40,10 +40,21 @@ public class EquipmentRendererMixin {
         if(textureIdentifier.get() != null)
         {
             if(args.get(2)){
-                RenderLayer layer = BetterEnchants.getOrCreateArmorRenderLayer(textureIdentifier.get());
-                if(layer != null){
-                    BetterEnchants.isArmor.set(true);
-                    BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true));
+                if(!BetterEnchants.getConfig().getArmorRenderSolid()) {
+                    RenderLayer layer = BetterEnchants.getOrCreateEnchantmentArmorRenderLayer(textureIdentifier.get());
+                    if (layer != null) {
+                        BetterEnchants.isArmor.set(true);
+
+                        BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true));
+                    }
+                }
+                else
+                {
+                    RenderLayer layer = BetterEnchants.getOrCreateSolidArmorRenderLayer(textureIdentifier.get());
+                    if (layer != null) {
+                        BetterEnchants.isArmor.set(true);
+                        BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, false));
+                    }
                 }
             }
             textureIdentifier.remove();
