@@ -20,11 +20,6 @@ import java.util.Set;
 
 @Mixin(VertexConsumerProvider.Immediate.class)
 public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProvider_ImmediateAcessor {
-    @Unique
-    private int mask_dirty = 0;
-    @Unique
-    private int solid_dirty = 0;
-
     @Shadow
     @Final
     protected SequencedMap<RenderLayer, BufferAllocator> layerBuffers;
@@ -32,7 +27,7 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
     @Shadow
     public void draw(RenderLayer layer){}
 
-    @Inject(method = "draw()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;drawCurrentLayer()V"))
+    @Inject(method = "drawCurrentLayer", at = @At("HEAD"))
     private void Da0ne$drawBeforeCustom(CallbackInfo ci)
     {
         for (RenderLayer renderLayer : this.layerBuffers.keySet()) {
@@ -43,7 +38,7 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
     }
 
     @ModifyExpressionValue(method = "draw()V", at = @At(value = "INVOKE", target = "Ljava/util/SequencedMap;keySet()Ljava/util/Set;"))
-    private Set<RenderLayer> Da0ne$removeDrawLoops(Set<RenderLayer> original)
+    private Set<RenderLayer> Da0ne$removeDrawLoop(Set<RenderLayer> original)
     {
         Set<RenderLayer> copiedSet = new HashSet<>(original);
         for(RenderLayer renderLayer : original)
@@ -54,6 +49,11 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
         }
         return copiedSet;
     }
+
+    @Unique
+    private int mask_dirty = 0;
+    @Unique
+    private int solid_dirty = 0;
 
     @Override
     public SequencedMap<RenderLayer, BufferAllocator> Da0ne$getLayerBuffers() {

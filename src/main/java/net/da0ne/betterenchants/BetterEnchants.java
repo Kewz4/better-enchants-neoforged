@@ -157,6 +157,7 @@ public class BetterEnchants implements ModInitializer {
 		loadConfig();
 
 		((RenderLayerAcessor)solidSolidLayer).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAcessor)solidCutoutLayer).Da0ne$setDrawBeforeCustom(true);
 
 		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), enchantCutoutLayer);
 		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), enchantSolidLayer);

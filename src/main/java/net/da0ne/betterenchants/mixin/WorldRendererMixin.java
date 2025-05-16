@@ -19,8 +19,8 @@ public class WorldRendererMixin {
         return receiver;
     }
 
-    @ModifyArg( method = "method_62214", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;renderEntities(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/RenderTickCounter;Ljava/util/List;)V"))
-    private VertexConsumerProvider.Immediate Da0ne$RenderMainItemTranslucent(VertexConsumerProvider.Immediate receiver)
+    @ModifyReceiver( method = "method_62214", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;draw(Lnet/minecraft/client/render/RenderLayer;)V", ordinal = 3))
+    private VertexConsumerProvider.Immediate Da0ne$RenderMainItemTranslucent(VertexConsumerProvider.Immediate receiver, RenderLayer layer)
     {
         for(var customLayer : BetterEnchants.solidOutlineLayers.renderLayers())
         {
