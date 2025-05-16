@@ -131,7 +131,7 @@ public class BetterEnchants implements ModInitializer {
 						.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
 						.writeMaskState(RenderLayer.COLOR_MASK)
 						.build(true));
-		((RenderLayerAcessor)layer).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAcessor)layer).Da0ne$setDrawBeforeCustom(solidSolidLayer, true);
 		return layer;
 	}
 
@@ -156,7 +156,7 @@ public class BetterEnchants implements ModInitializer {
 
 		loadConfig();
 
-		((RenderLayerAcessor)solidSolidLayer).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAcessor)solidSolidLayer).Da0ne$setDrawBeforeCustom(solidSolidLayer, true);
 
 		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), enchantCutoutLayer);
 		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), enchantSolidLayer);

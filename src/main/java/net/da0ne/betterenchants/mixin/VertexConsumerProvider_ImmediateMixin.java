@@ -36,7 +36,7 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
     private void Da0ne$drawBeforeCustom(CallbackInfo ci)
     {
         for (RenderLayer renderLayer : this.layerBuffers.keySet()) {
-            if(((RenderLayerAcessor)renderLayer).Da0ne$shouldDrawBeforeCustom()){
+            if(((RenderLayerAcessor)renderLayer).Da0ne$shouldDrawBeforeCustom(renderLayer)){
                 draw(renderLayer);
             }
         }
@@ -48,7 +48,7 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
         Set<RenderLayer> copiedSet = new HashSet<>(original);
         for(RenderLayer renderLayer : original)
         {
-            if(((RenderLayerAcessor)renderLayer).Da0ne$shouldDrawBeforeCustom()) {
+            if(((RenderLayerAcessor)renderLayer).Da0ne$shouldDrawBeforeCustom(renderLayer)) {
                 copiedSet.remove(renderLayer);
             }
         }
