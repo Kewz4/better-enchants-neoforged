@@ -39,10 +39,10 @@ public class ClothConfigScreenFactory {
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().setOutlineColorAsInt(newValue))
                 .build());
 
-        render.addEntry(entryBuilder.startFloatField(Text.translatable("option.betterenchants.render.size"), BetterEnchants.getConfig().getScale())
-                .setDefaultValue(0.02f)
+        render.addEntry(entryBuilder.startIntSlider(Text.translatable("option.betterenchants.render.size"), (int)(BetterEnchants.getConfig().getScale()*1000f), 0, 30)
+                .setDefaultValue(20)
                 .setTooltip(Text.translatable("tooltip.betterenchants.render.size"))
-                .setSaveConsumer(newValue -> BetterEnchants.getConfig().outline_size = newValue)
+                .setSaveConsumer(newValue -> BetterEnchants.getConfig().outline_size = ((float)newValue)/1000f )
                 .build());
 
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.render"), BetterEnchants.getConfig().shouldRenderArmor())
