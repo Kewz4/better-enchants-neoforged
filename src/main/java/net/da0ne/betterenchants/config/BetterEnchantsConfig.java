@@ -24,7 +24,6 @@ public class BetterEnchantsConfig {
     public boolean effect_armor = false;
     public boolean effect_special_item = true;
     public boolean armor_double_sided = true;
-    public boolean use_original_armor_uv = true;
     public boolean use_original_special_item_uv = false;
     public boolean item_render_solid = false;
     public boolean armor_render_solid = true;
@@ -84,7 +83,7 @@ public class BetterEnchantsConfig {
     {
         if(isArmor)
         {
-            return use_original_armor_uv;
+            return false;
         }
         return use_original_special_item_uv;
     }

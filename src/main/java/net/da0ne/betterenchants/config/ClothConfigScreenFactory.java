@@ -55,11 +55,6 @@ public class ClothConfigScreenFactory {
                 .setTooltip(Text.translatable("tooltip.betterenchants.armor.solid"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().armor_render_solid = newValue)
                 .build());
-        armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.originaluv"), BetterEnchants.getConfig().use_original_armor_uv)
-                .setDefaultValue(true)
-                .setTooltip(Text.translatable("tooltip.betterenchants.armor.originaluv"))
-                .setSaveConsumer(newValue -> BetterEnchants.getConfig().use_original_armor_uv = newValue)
-                .build());
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.doubleside"), BetterEnchants.getConfig().renderArmorDoubleSided())
                 .setDefaultValue(true)
                 .setTooltip(Text.translatable("tooltip.betterenchants.armor.doubleside"))
@@ -73,7 +68,7 @@ public class ClothConfigScreenFactory {
                 .build());
         special.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.special.solid"), BetterEnchants.getConfig().getSpecialRenderSolid())
                 .setDefaultValue(false)
-                .setTooltip(Text.translatable("tooltip.betterenchants.special.solid1").append("\n").append(Text.translatable("tooltip.betterenchants.special.solid2").formatted(Formatting.RED)))
+                .setTooltip(Text.translatable("tooltip.betterenchants.special.solid1"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().special_item_render_solid = newValue)
                 .build());
         special.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.special.originaluv"), BetterEnchants.getConfig().use_original_special_item_uv)
