@@ -14,7 +14,9 @@ import java.util.SequencedMap;
 @Mixin(VertexConsumerProvider.Immediate.class)
 public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProvider_ImmediateAcessor {
     @Unique
-    private int dirty = 0;
+    private int mask_dirty = 0;
+    @Unique
+    private int solid_dirty = 0;
 
     @Shadow
     @Final
@@ -26,12 +28,22 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
     }
 
     @Override
-    public int Da0ne$getDirty() {
-        return dirty;
+    public int Da0ne$getMaskDirty() {
+        return mask_dirty;
     }
 
     @Override
-    public void Da0ne$setDirty(int newDirty) {
-        dirty = newDirty;
+    public void Da0ne$setMaskDirty(int newDirty) {
+        mask_dirty = newDirty;
+    }
+
+    @Override
+    public int Da0ne$getSolidDirty() {
+        return solid_dirty;
+    }
+
+    @Override
+    public void Da0ne$setSolidDirty(int newDirty) {
+       solid_dirty = newDirty;
     }
 }

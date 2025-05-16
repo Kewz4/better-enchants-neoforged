@@ -51,6 +51,7 @@ public class EquipmentRendererMixin {
                 else
                 {
                     RenderLayer layer = BetterEnchants.getOrCreateSolidArmorRenderLayer(textureIdentifier.get());
+                    //RenderLayer layer = RenderLayer.getArmorCutoutNoCull(textureIdentifier.get());
                     if (layer != null) {
                         BetterEnchants.isArmor.set(true);
                         BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, false));

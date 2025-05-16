@@ -57,6 +57,7 @@ public class BetterEnchants implements ModInitializer {
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
 					.program(solidShader)
 					.writeMaskState(RenderLayer.DEPTH_MASK)
+					.cull(RenderLayer.ENABLE_CULLING)
 					//.texture(RenderLayer.BLOCK_ATLAS_TEXTURE)
 					.build(true)
 	);
@@ -85,10 +86,12 @@ public class BetterEnchants implements ModInitializer {
 			true,
 			false,
 			RenderLayer.MultiPhaseParameters.builder()
-					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
 					.program(solidShader)
+					.transparency(RenderLayer.NO_TRANSPARENCY)
+					.cull(RenderLayer.ENABLE_CULLING)
+					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
+					.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
 					.writeMaskState(RenderLayer.COLOR_MASK)
-					//.texture(RenderLayer.BLOCK_ATLAS_TEXTURE)
 					.build(true)
 	);
 
@@ -105,8 +108,6 @@ public class BetterEnchants implements ModInitializer {
 					.cull(RenderLayer.ENABLE_CULLING)
 					.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-					//.layering(RenderLayer.VIEW_OFFSET_Z_LAYERING)
-					//.depthTest(RenderLayer.LEQUAL_DEPTH_TEST)
 					.writeMaskState(RenderLayer.DEPTH_MASK)
 					.cull(RenderLayer.ENABLE_CULLING)
 					.build(true));
@@ -122,13 +123,12 @@ public class BetterEnchants implements ModInitializer {
 				false,
 				RenderLayer.MultiPhaseParameters.builder()
 						.program(cutoutShader)
-						.cull(RenderLayer.ENABLE_CULLING)
 						.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
-						.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-						//.layering(RenderLayer.VIEW_OFFSET_Z_LAYERING)
-						//.depthTest(RenderLayer.LEQUAL_DEPTH_TEST)
-						.writeMaskState(RenderLayer.COLOR_MASK)
+						.transparency(RenderLayer.NO_TRANSPARENCY)
 						.cull(RenderLayer.ENABLE_CULLING)
+						.lightmap(RenderLayer.ENABLE_LIGHTMAP)
+						.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
+						.writeMaskState(RenderLayer.COLOR_MASK)
 						.build(true));
 	}
 

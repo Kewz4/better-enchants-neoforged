@@ -50,11 +50,11 @@ public class ClothConfigScreenFactory {
                 .setTooltip(Text.translatable("tooltip.betterenchants.armor.render.line1").append("\n").append(Text.translatable("tooltip.betterenchants.armor.render.line2").formatted(Formatting.RED)))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().effect_armor = newValue)
                 .build());
-        /*armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.solid"), BetterEnchants.getConfig().getArmorRenderSolid())
+        armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.solid"), BetterEnchants.getConfig().getArmorRenderSolid())
                 .setDefaultValue(true)
                 .setTooltip(Text.translatable("tooltip.betterenchants.armor.solid"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().armor_render_solid = newValue)
-                .build());*/
+                .build());
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.originaluv"), BetterEnchants.getConfig().use_original_armor_uv)
                 .setDefaultValue(true)
                 .setTooltip(Text.translatable("tooltip.betterenchants.armor.originaluv"))

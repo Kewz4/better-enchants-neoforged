@@ -23,8 +23,9 @@ public class BufferBuilderStorageMixin {
         VertexConsumerProvider_ImmediateAcessor originalCast = ((VertexConsumerProvider_ImmediateAcessor)original);
         var enchantGlintLayer = RenderLayer.getArmorEntityGlint();
         var buffers = originalCast.Da0ne$getLayerBuffers();
-        if(originalCast.Da0ne$getDirty() != BetterEnchants.enchantmentMaskLayers.getDirty() && buffers.containsKey(enchantGlintLayer)){
-            originalCast.Da0ne$setDirty(BetterEnchants.enchantmentMaskLayers.getDirty());
+        if((originalCast.Da0ne$getMaskDirty() != BetterEnchants.enchantmentMaskLayers.getDirty() && buffers.containsKey(enchantGlintLayer)) || (originalCast.Da0ne$getSolidDirty() != BetterEnchants.solidOutlineLayers.getDirty() && buffers.containsKey(TexturedRenderLayers.getEntitySolid()))){
+            originalCast.Da0ne$setMaskDirty(BetterEnchants.enchantmentMaskLayers.getDirty());
+            originalCast.Da0ne$setSolidDirty(BetterEnchants.solidOutlineLayers.getDirty());
             SequencedMap<RenderLayer, BufferAllocator> clonedBuffer = new Object2ObjectLinkedOpenHashMap<>(buffers);
             buffers.clear();
             for(var set : clonedBuffer.entrySet())

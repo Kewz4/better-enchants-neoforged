@@ -27,7 +27,7 @@ public class BetterEnchantsConfig {
     public boolean use_original_armor_uv = true;
     public boolean use_original_special_item_uv = false;
     public boolean item_render_solid = false;
-    //public boolean armor_render_solid = true;
+    public boolean armor_render_solid = true;
     public boolean special_item_render_solid = false;
     public float[] outline_color = {0.827f,0.592f,0.973f};
     public float[] custom_uv = {0,0};
@@ -46,8 +46,7 @@ public class BetterEnchantsConfig {
 
     public boolean getArmorRenderSolid()
     {
-        return false;
-        //return armor_render_solid;
+        return armor_render_solid;
     }
 
     public boolean getSpecialRenderSolid()
