@@ -1,6 +1,7 @@
 package net.da0ne.betterenchants;
 
 import net.da0ne.betterenchants.config.BetterEnchantsConfig;
+import net.da0ne.betterenchants.mixin_acessors.RenderLayerAcessor;
 import net.da0ne.betterenchants.util.CustomRenderLayers;
 import net.fabricmc.api.ModInitializer;
 
@@ -114,7 +115,7 @@ public class BetterEnchants implements ModInitializer {
 	}
 
 	private static RenderLayer createSolidArmorRenderLayer(Identifier texture){
-		return RenderLayer.of(
+		RenderLayer layer = RenderLayer.of(
 				"custom_enchants_armor",
 				VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
 				VertexFormat.DrawMode.QUADS,
@@ -130,6 +131,8 @@ public class BetterEnchants implements ModInitializer {
 						.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
 						.writeMaskState(RenderLayer.COLOR_MASK)
 						.build(true));
+		((RenderLayerAcessor)layer).Da0ne$setDrawBeforeCustom(true);
+		return layer;
 	}
 
 	public static final CustomRenderLayers enchantmentMaskLayers = new CustomRenderLayers();
@@ -152,6 +155,9 @@ public class BetterEnchants implements ModInitializer {
 		// Proceed with mild caution.
 
 		loadConfig();
+
+		((RenderLayerAcessor)solidSolidLayer).Da0ne$setDrawBeforeCustom(true);
+
 		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), enchantCutoutLayer);
 		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), enchantSolidLayer);
 		solidOutlineLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), solidCutoutLayer);
