@@ -1,6 +1,7 @@
 package net.da0ne.betterenchants.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReceiver;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.da0ne.betterenchants.mixin_acessors.RenderLayerAcessor;
 import net.da0ne.betterenchants.mixin_acessors.VertexConsumerProvider_ImmediateAcessor;
 import net.minecraft.client.render.RenderLayer;
@@ -17,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.HashSet;
 import java.util.SequencedMap;
 import java.util.Set;
-import java.util.TreeSet;
 
 @Mixin(VertexConsumerProvider.Immediate.class)
 public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProvider_ImmediateAcessor {
@@ -38,17 +38,17 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
         }
     }
 
-    @ModifyExpressionValue(method = "draw()V", at = @At(value = "INVOKE", target = "Ljava/util/SequencedMap;keySet()Ljava/util/Set;"))
-    private Set<RenderLayer> Da0ne$removeDrawLoop(Set<RenderLayer> original)
+    @ModifyReceiver(method = "draw()V", at = @At(value = "INVOKE", target = "Ljava/util/SequencedMap;keySet()Ljava/util/Set;"))
+    private SequencedMap<RenderLayer, BufferAllocator> Da0ne$removeDrawLoop(SequencedMap<RenderLayer, BufferAllocator> receiver)
     {
-        Set<RenderLayer> copiedSet = new TreeSet<>(original);
-        for(RenderLayer renderLayer : original)
+        SequencedMap<RenderLayer, BufferAllocator> copiedMap = new Object2ObjectLinkedOpenHashMap<>();
+        for(var entry : receiver.entrySet())
         {
-            if(((RenderLayerAcessor)renderLayer).Da0ne$shouldDrawBeforeCustom()) {
-                copiedSet.remove(renderLayer);
+            if(!((RenderLayerAcessor)entry.getKey()).Da0ne$shouldDrawBeforeCustom()) {
+                copiedMap.put(entry.getKey(), entry.getValue());
             }
         }
-        return copiedSet;
+        return receiver;
     }
 
     @Unique
