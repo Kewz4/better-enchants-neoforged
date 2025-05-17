@@ -1,5 +1,6 @@
 package net.da0ne.betterenchants.util;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
@@ -32,6 +33,11 @@ public class CustomRenderLayers {
     public RenderLayer getCustomRenderLayer(Identifier identifier)
     {
         return customRenderLayers.get(identifier);
+    }
+
+    public boolean containsRenderLayer(RenderLayer layer)
+    {
+        return customRenderLayers.containsValue(layer);
     }
 
     public Iterable<RenderLayer> renderLayers()

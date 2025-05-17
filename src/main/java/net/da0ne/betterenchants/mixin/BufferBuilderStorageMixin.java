@@ -1,6 +1,7 @@
 package net.da0ne.betterenchants.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.da0ne.betterenchants.BetterEnchants;
 import net.da0ne.betterenchants.mixin_acessors.VertexConsumerProvider_ImmediateAcessor;
@@ -30,21 +31,24 @@ public class BufferBuilderStorageMixin {
             buffers.clear();
             for(var set : clonedBuffer.entrySet())
             {
-                if(set.getKey() == TexturedRenderLayers.getEntitySolid())
+                if(!BetterEnchants.enchantmentMaskLayers.containsRenderLayer(set.getKey()) && !BetterEnchants.solidOutlineLayers.containsRenderLayer(set.getKey()))
                 {
-                    for(RenderLayer layer : BetterEnchants.solidOutlineLayers.renderLayers())
+                    if(set.getKey() == TexturedRenderLayers.getEntitySolid())
                     {
-                        buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
+                        for(RenderLayer layer : BetterEnchants.solidOutlineLayers.renderLayers())
+                        {
+                            buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
+                        }
                     }
-                }
-                if(set.getKey() == enchantGlintLayer)
-                {
-                    for(RenderLayer layer : BetterEnchants.enchantmentMaskLayers.renderLayers())
+                    else if(set.getKey() == enchantGlintLayer)
                     {
-                        buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
+                        for(RenderLayer layer : BetterEnchants.enchantmentMaskLayers.renderLayers())
+                        {
+                            buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
+                        }
                     }
+                    buffers.put(set.getKey(), set.getValue());
                 }
-                buffers.put(set.getKey(), set.getValue());
             }
         }
         return original;

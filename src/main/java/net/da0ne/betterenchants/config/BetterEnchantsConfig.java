@@ -83,7 +83,7 @@ public class BetterEnchantsConfig {
     {
         if(isArmor)
         {
-            return false;
+            return true;
         }
         return use_original_special_item_uv;
     }

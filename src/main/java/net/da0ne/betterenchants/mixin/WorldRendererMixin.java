@@ -5,7 +5,6 @@ import net.da0ne.betterenchants.BetterEnchants;
 import net.minecraft.client.render.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
