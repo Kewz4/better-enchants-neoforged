@@ -1,12 +1,13 @@
 package net.da0ne.betterenchants;
 
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.da0ne.betterenchants.config.BetterEnchantsConfig;
 import net.da0ne.betterenchants.mixin_acessors.RenderLayerAcessor;
 import net.da0ne.betterenchants.util.CustomRenderLayers;
 import net.fabricmc.api.ModInitializer;
 
-import net.minecraft.client.gl.Defines;
-import net.minecraft.client.gl.ShaderProgramKey;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TriState;
@@ -26,110 +27,129 @@ public class BetterEnchants implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 
-	public static final ShaderProgramKey cutoutShaderKey = new ShaderProgramKey(Identifier.of(MOD_ID,"core/cutout"), VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
-	public static final RenderPhase.ShaderProgram cutoutShader = new RenderPhase.ShaderProgram(cutoutShaderKey);
-	public static final ShaderProgramKey solidShaderKey = new ShaderProgramKey(Identifier.of(MOD_ID,"core/solid"), VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
-	public static final RenderPhase.ShaderProgram solidShader = new RenderPhase.ShaderProgram(solidShaderKey);
+	public static final RenderPipeline.Snippet OUTLINE_SNIPPET = RenderPipeline.builder(RenderPipelines.MATRICES_COLOR_FOG_OFFSET_SNIPPET)
+			.withVertexShader(Identifier.of(MOD_ID,"core/outline"))
+			.withFragmentShader(Identifier.of(MOD_ID,"core/outline"))
+			.withSampler("Sampler0")
+			.withSampler("Sampler2")
+			.withVertexFormat(VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS)
+			.buildSnippet();
+
+	/*public static final ShaderProgramKey cutoutShaderKey = new ShaderProgramKey(, VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
+	public static final ShaderProgram cutoutShader = new RenderPhase.ShaderProgram(cutoutShaderKey);
+	public static final ShaderProgramKey solidShaderKey = new ShaderProgramKey(, VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
+	public static final RenderPhase.ShaderProgram solidShader = new RenderPhase.ShaderProgram(solidShaderKey);*/
+
+	public static final RenderPipeline CUTOUT_PIPELINE_DEPTH = RenderPipelines.register(
+			RenderPipeline.builder(OUTLINE_SNIPPET)
+					.withLocation(Identifier.of(MOD_ID,"pipeline/cutout"))
+					.withDepthWrite(true)
+					.withColorWrite(false)
+					.withCull(true)
+					.withShaderDefine("ALPHA_CUTOUT", 0.1F)
+					.build()
+	);
+
+	public static final RenderPipeline SOLID_PIPELINE_DEPTH = RenderPipelines.register(
+			RenderPipeline.builder(OUTLINE_SNIPPET)
+					.withDepthWrite(true)
+					.withColorWrite(false)
+					.withCull(true)
+					.withLocation(Identifier.of(MOD_ID,"pipeline/solid"))
+					.build()
+	);
+
+	public static final RenderPipeline CUTOUT_PIPELINE_COLOR = RenderPipelines.register(
+			RenderPipeline.builder(OUTLINE_SNIPPET)
+					.withLocation(Identifier.of(MOD_ID,"pipeline/cutout"))
+					.withDepthWrite(false)
+					.withColorWrite(true)
+					.withCull(true)
+					.withShaderDefine("ALPHA_CUTOUT", 0.1F)
+					.build()
+	);
+
+	public static final RenderPipeline SOLID_PIPELINE_COLOR = RenderPipelines.register(
+			RenderPipeline.builder(OUTLINE_SNIPPET)
+					.withDepthWrite(false)
+					.withColorWrite(true)
+					.withCull(true)
+					.withLocation(Identifier.of(MOD_ID,"pipeline/solid"))
+					.build()
+	);
 
 	public static final RenderLayer enchantCutoutLayer = RenderLayer.of(
 			"custom_enchants_cutout",
-			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
-			VertexFormat.DrawMode.QUADS,
 			786432,
 			true,
 			false,
+			CUTOUT_PIPELINE_DEPTH,
 			RenderLayer.MultiPhaseParameters.builder()
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-					.program(cutoutShader)
-					.writeMaskState(RenderLayer.DEPTH_MASK)
 					.texture(RenderLayer.BLOCK_ATLAS_TEXTURE)
-					.cull(RenderLayer.ENABLE_CULLING)
 					.build(true)
 	);
 
 	public static final RenderLayer enchantSolidLayer = RenderLayer.of(
 			"custom_enchants_cutout",
-			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
-			VertexFormat.DrawMode.QUADS,
 			786432,
 			true,
 			false,
+			SOLID_PIPELINE_DEPTH,
 			RenderLayer.MultiPhaseParameters.builder()
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-					.program(solidShader)
-					.writeMaskState(RenderLayer.DEPTH_MASK)
-					.cull(RenderLayer.ENABLE_CULLING)
 					//.texture(RenderLayer.BLOCK_ATLAS_TEXTURE)
 					.build(true)
 	);
 
 	public static final RenderLayer solidCutoutLayer = RenderLayer.of(
 			"custom_enchants_cutout",
-			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
-			VertexFormat.DrawMode.QUADS,
 			786432,
 			true,
 			false,
+			CUTOUT_PIPELINE_COLOR,
 			RenderLayer.MultiPhaseParameters.builder()
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-					.program(cutoutShader)
-					.writeMaskState(RenderLayer.COLOR_MASK)
 					.texture(RenderLayer.BLOCK_ATLAS_TEXTURE)
-					.cull(RenderLayer.ENABLE_CULLING)
 					.build(true)
 	);
 
 	public static final RenderLayer solidSolidLayer = RenderLayer.of(
 			"custom_enchants_cutout",
-			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
-			VertexFormat.DrawMode.QUADS,
 			786432,
 			true,
 			false,
+			SOLID_PIPELINE_COLOR,
 			RenderLayer.MultiPhaseParameters.builder()
-					.program(solidShader)
-					.transparency(RenderLayer.NO_TRANSPARENCY)
-					.cull(RenderLayer.ENABLE_CULLING)
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
 					.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
-					.writeMaskState(RenderLayer.COLOR_MASK)
 					.build(true)
 	);
 
 	private static RenderLayer createEnchantmentArmorRenderLayer(Identifier texture){
 		return RenderLayer.of(
 			"custom_enchants_armor",
-			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
-			VertexFormat.DrawMode.QUADS,
 				786432,
 			true,
 			false,
+			CUTOUT_PIPELINE_DEPTH,
 			RenderLayer.MultiPhaseParameters.builder()
-					.program(cutoutShader)
-					.cull(RenderLayer.ENABLE_CULLING)
 					.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-					.writeMaskState(RenderLayer.DEPTH_MASK)
-					.cull(RenderLayer.ENABLE_CULLING)
 					.build(true));
 	}
 
 	private static RenderLayer createSolidArmorRenderLayer(Identifier texture){
 		RenderLayer layer = RenderLayer.of(
 				"custom_enchants_armor",
-				VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
-				VertexFormat.DrawMode.QUADS,
 				786432,
 				true,
 				false,
+				CUTOUT_PIPELINE_COLOR,
 				RenderLayer.MultiPhaseParameters.builder()
-						.program(cutoutShader)
 						.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
-						.transparency(RenderLayer.NO_TRANSPARENCY)
-						.cull(RenderLayer.ENABLE_CULLING)
 						.lightmap(RenderLayer.ENABLE_LIGHTMAP)
 						.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
-						.writeMaskState(RenderLayer.COLOR_MASK)
 						.build(true));
 		((RenderLayerAcessor)layer).Da0ne$setDrawBeforeCustom(true);
 		return layer;
