@@ -27,8 +27,7 @@
   "tooltip.betterenchants.render.color": "The color of the outline when we are using render solid. Global for all render solid toggles.",
   "tooltip.betterenchants.render.size": "The size of the outline effect. Some arbitrary units.",
 
-  "tooltip.betterenchants.armor.render.line1": "Whether or not to render the effect on worn armor.",
-  "tooltip.betterenchants.armor.render.line2": "Implementation is not stable. Disable this if you have frequent crashes.",
+  "tooltip.betterenchants.armor.render": "Whether or not to render the effect on worn armor.",
   "tooltip.betterenchants.armor.solid": "Toggles between solid outlines and enchantment glint. The enchantment effect is not very noticeable with this disabled without a custom enchantment shader",
   "tooltip.betterenchants.armor.doubleside": "Whether to render an outline on the inside of the helmet. You may want to disable this with some mods or resource packs.",
 

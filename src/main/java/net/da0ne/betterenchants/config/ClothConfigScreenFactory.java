@@ -47,7 +47,7 @@ public class ClothConfigScreenFactory {
 
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.render"), BetterEnchants.getConfig().shouldRenderArmor())
                 .setDefaultValue(false)
-                .setTooltip(Text.translatable("tooltip.betterenchants.armor.render.line1").append("\n").append(Text.translatable("tooltip.betterenchants.armor.render.line2").formatted(Formatting.RED)))
+                .setTooltip(Text.translatable("tooltip.betterenchants.armor.render"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().effect_armor = newValue)
                 .build());
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.solid"), BetterEnchants.getConfig().getArmorRenderSolid())
