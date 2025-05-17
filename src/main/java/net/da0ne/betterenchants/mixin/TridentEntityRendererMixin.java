@@ -1,6 +1,5 @@
 package net.da0ne.betterenchants.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.da0ne.betterenchants.BetterEnchants;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.TridentEntityRenderer;
@@ -20,7 +19,12 @@ public class TridentEntityRendererMixin {
     {
         if(tridentEntityRenderState.enchanted)
         {
-            BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumerProvider, BetterEnchants.solidLayer, true, true));
+            if(!BetterEnchants.getConfig().getSpecialRenderSolid()) {
+                BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumerProvider, BetterEnchants.enchantSolidLayer, true, true));
+            }
+            else{
+                BetterEnchants.isEnchanted.set(vertexConsumerProvider.getBuffer(BetterEnchants.solidSolidLayer));
+            }
         }
     }
 

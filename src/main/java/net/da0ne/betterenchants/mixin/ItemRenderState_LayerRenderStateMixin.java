@@ -27,11 +27,21 @@ public class ItemRenderState_LayerRenderStateMixin {
         if(glint != ItemRenderState.Glint.NONE){
             if(specialModelType != null)
             {
-                BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumers, BetterEnchants.solidLayer, true, true));
+                if(!BetterEnchants.getConfig().getSpecialRenderSolid()) {
+                    BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumers, BetterEnchants.enchantSolidLayer, true, true));
+                }
+                else{
+                    BetterEnchants.isEnchanted.set(vertexConsumers.getBuffer(BetterEnchants.solidSolidLayer));
+                }
             }
             else
             {
-                BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumers, BetterEnchants.cutoutLayer, true, true));
+                if(!BetterEnchants.getConfig().getItemRenderSolid()) {
+                    BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumers, BetterEnchants.enchantCutoutLayer, true, true));
+                }
+                else{
+                    BetterEnchants.isEnchanted.set(vertexConsumers.getBuffer(BetterEnchants.solidCutoutLayer));
+                }
             }
         }
     }

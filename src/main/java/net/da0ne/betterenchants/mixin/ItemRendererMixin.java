@@ -31,6 +31,7 @@ public class ItemRendererMixin {
             float scale = BetterEnchants.getConfig().getScale();
             MatrixStack.Entry matrixEntry = matrices.peek();
 
+            float[] outlineColor = BetterEnchants.getConfig().getOutlineColor();
             for (BakedQuad quad : quads) {
                 int[] vertexData = quad.getVertexData().clone();
                 Vector3f[] defaultVerts = VertexHelper.getVertexPos(vertexData);
@@ -47,9 +48,9 @@ public class ItemRendererMixin {
 
                         VertexHelper.setVertexData(vertexData, vertPoses);
 
-                        BakedQuad enchantmentQuad = new BakedQuad(VertexHelper.flip(vertexData), -1, quad.getFace().getOpposite(), null, false, quad.getLightEmission());
+                        BakedQuad enchantmentQuad = new BakedQuad(VertexHelper.flip(vertexData), -1, quad.getFace().getOpposite(), null, false, 100);
 
-                        BetterEnchants.isEnchanted.get().quad(matrixEntry, enchantmentQuad, 1f, 1f, 1f, 0.5f, 0, 0);
+                        BetterEnchants.isEnchanted.get().quad(matrixEntry, enchantmentQuad, outlineColor[0], outlineColor[1], outlineColor[2], 1, 0, 0);
                     }
                 }
             }

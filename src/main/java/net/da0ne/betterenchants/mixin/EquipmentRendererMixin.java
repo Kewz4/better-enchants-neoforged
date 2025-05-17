@@ -1,6 +1,7 @@
 package net.da0ne.betterenchants.mixin;
 
 import net.da0ne.betterenchants.BetterEnchants;
+import net.da0ne.betterenchants.mixin_acessors.VertexConsumerProvider_ImmediateAcessor;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -40,19 +41,37 @@ public class EquipmentRendererMixin {
         if(textureIdentifier.get() != null)
         {
             if(args.get(2)){
-                RenderLayer layer = BetterEnchants.getOrCreateArmorRenderLayer(textureIdentifier.get());
-                if(layer != null){
-                    BetterEnchants.isArmor.set(true);
-                    BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true));
+                if(!BetterEnchants.getConfig().getArmorRenderSolid()) {
+                    RenderLayer layer = BetterEnchants.getOrCreateEnchantmentArmorRenderLayer(textureIdentifier.get());
+                    if (layer != null && ((VertexConsumerProvider_ImmediateAcessor)(args.get(0))).Da0ne$getMaskDirty() == BetterEnchants.enchantmentMaskLayers.getDirty()) {
+                        BetterEnchants.isArmor.set(true);
+
+                        BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true));
+                    }
+                }
+                else
+                {
+                    RenderLayer layer = BetterEnchants.getOrCreateSolidArmorRenderLayer(textureIdentifier.get());
+                    //RenderLayer layer = RenderLayer.getArmorCutoutNoCull(textureIdentifier.get());
+                    if (layer != null && ((VertexConsumerProvider_ImmediateAcessor)(args.get(0))).Da0ne$getSolidDirty() == BetterEnchants.solidOutlineLayers.getDirty()) {
+                        BetterEnchants.isArmor.set(true);
+                        BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, false));
+                    }
                 }
             }
-            textureIdentifier.remove();
         }
     }
 
     @Inject(method = "render(Lnet/minecraft/client/render/entity/equipment/EquipmentModel$LayerType;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/client/model/Model;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/util/Identifier;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;III)V", shift = At.Shift.AFTER))
     private void Da0ne$renderEntry(EquipmentModel.LayerType layerType, RegistryKey<EquipmentAsset> assetKey, Model model, ItemStack stack, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, @Nullable Identifier texture, CallbackInfo ci)
     {
+        if(BetterEnchants.getConfig().getArmorRenderSolid()) {
+            RenderLayer layer = BetterEnchants.getOrCreateSolidArmorRenderLayer(textureIdentifier.get());
+            if (layer != null&& ((VertexConsumerProvider_ImmediateAcessor)vertexConsumers).Da0ne$getSolidDirty() == BetterEnchants.solidOutlineLayers.getDirty()) {
+                ItemRenderer.getArmorGlintConsumer(vertexConsumers, layer, false);
+            }
+        }
+        textureIdentifier.remove();
         BetterEnchants.isArmor.remove();
         BetterEnchants.isEnchanted.remove();
     }

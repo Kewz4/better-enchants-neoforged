@@ -7,6 +7,7 @@ import net.da0ne.betterenchants.BetterEnchants;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.ColorHelper;
 
 public class ClothConfigScreenFactory {
     public static Screen makeConfig(Screen parent)
@@ -27,20 +28,32 @@ public class ClothConfigScreenFactory {
                 .setTooltip(Text.translatable("tooltip.betterenchants.render.enabled"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().enabled = newValue)
                 .build());
-        render.addEntry(entryBuilder.startFloatField(Text.translatable("option.betterenchants.render.size"), BetterEnchants.getConfig().getScale())
-                .setDefaultValue(0.02f)
-                .setTooltip(Text.translatable("tooltip.betterenchants.render.size"))
-                .setSaveConsumer(newValue -> BetterEnchants.getConfig().outline_size = newValue)
+        render.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.render.solid"), BetterEnchants.getConfig().getItemRenderSolid())
+                .setDefaultValue(false)
+                .setTooltip(Text.translatable("tooltip.betterenchants.render.solid"))
+                .setSaveConsumer(newValue -> BetterEnchants.getConfig().item_render_solid = newValue)
                 .build());
+        render.addEntry(entryBuilder.startColorField(Text.translatable("option.betterenchants.render.color"), BetterEnchants.getConfig().getOutlineColorAsInt())
+                .setDefaultValue(ColorHelper.getArgb(0,210, 150, 248))
+                .setTooltip(Text.translatable("tooltip.betterenchants.render.color"))
+                .setSaveConsumer(newValue -> BetterEnchants.getConfig().setOutlineColorAsInt(newValue))
+                .build());
+
+        render.addEntry(entryBuilder.startIntSlider(Text.translatable("option.betterenchants.render.size"), (int)(BetterEnchants.getConfig().getScale()*1000f), 0, 30)
+                .setDefaultValue(20)
+                .setTooltip(Text.translatable("tooltip.betterenchants.render.size"))
+                .setSaveConsumer(newValue -> BetterEnchants.getConfig().outline_size = ((float)newValue)/1000f )
+                .build());
+
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.render"), BetterEnchants.getConfig().shouldRenderArmor())
                 .setDefaultValue(false)
-                .setTooltip(Text.translatable("tooltip.betterenchants.armor.render.line1").append("\n").append(Text.translatable("tooltip.betterenchants.armor.render.line2").formatted(Formatting.RED)))
+                .setTooltip(Text.translatable("tooltip.betterenchants.armor.render"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().effect_armor = newValue)
                 .build());
-        armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.originaluv"), BetterEnchants.getConfig().use_original_armor_uv)
+        armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.solid"), BetterEnchants.getConfig().getArmorRenderSolid())
                 .setDefaultValue(true)
-                .setTooltip(Text.translatable("tooltip.betterenchants.armor.originaluv"))
-                .setSaveConsumer(newValue -> BetterEnchants.getConfig().use_original_armor_uv = newValue)
+                .setTooltip(Text.translatable("tooltip.betterenchants.armor.solid"))
+                .setSaveConsumer(newValue -> BetterEnchants.getConfig().armor_render_solid = newValue)
                 .build());
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.doubleside"), BetterEnchants.getConfig().renderArmorDoubleSided())
                 .setDefaultValue(true)
@@ -52,6 +65,11 @@ public class ClothConfigScreenFactory {
                 .setDefaultValue(true)
                 .setTooltip(Text.translatable("tooltip.betterenchants.special.render"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().effect_special_item = newValue)
+                .build());
+        special.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.special.solid"), BetterEnchants.getConfig().getSpecialRenderSolid())
+                .setDefaultValue(false)
+                .setTooltip(Text.translatable("tooltip.betterenchants.special.solid1"))
+                .setSaveConsumer(newValue -> BetterEnchants.getConfig().special_item_render_solid = newValue)
                 .build());
         special.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.special.originaluv"), BetterEnchants.getConfig().use_original_special_item_uv)
                 .setDefaultValue(false)

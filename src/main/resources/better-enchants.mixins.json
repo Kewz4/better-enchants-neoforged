@@ -3,14 +3,15 @@
 	"package": "net.da0ne.betterenchants.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
+		"RenderLayerMixin",
+		"BufferBuilderStorageMixin",
+		"EquipmentRendererMixin",
+		"ItemRendererMixin",
+		"ItemRenderState_LayerRenderStateMixin",
+		"ModelPart_CuboidMixin",
 		"TridentEntityRendererMixin",
 		"VertexConsumerProvider_ImmediateMixin",
-		"EquipmentRendererMixin",
-		"ModelPart_CuboidMixin",
-		"ItemRenderState_LayerRenderStateMixin",
-		"WorldRendererMixin",
-		"BufferBuilderStorageMixin",
-		"ItemRendererMixin"
+		"WorldRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

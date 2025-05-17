@@ -7,25 +7,34 @@
   "category.betterenchants.uvs": "UVS",
 
   "option.betterenchants.render.enabled": "Main render",
+  "option.betterenchants.render.solid": "Use solid outline",
+  "option.betterenchants.render.color": "Outline color",
   "option.betterenchants.render.size": "Outline size",
+
   "option.betterenchants.armor.render": "Render",
+  "option.betterenchants.armor.solid": "Use solid outline",
   "option.betterenchants.armor.originaluv": "Use original uvs",
   "option.betterenchants.armor.doubleside": "Render double sided",
+
   "option.betterenchants.special.render": "Render",
+  "option.betterenchants.special.solid": "Use solid outline",
   "option.betterenchants.special.originaluv": "Use original uvs",
   "option.betterenchants.uvs.u": "U",
   "option.betterenchants.uvs.v": "V",
 
   "tooltip.betterenchants.render.enabled": "Toggles all rendering.",
+  "tooltip.betterenchants.render.solid": "Toggles between solid outlines and enchantment glint. This toggle does not effect armor or special items.",
+  "tooltip.betterenchants.render.color": "The color of the outline when we are using render solid. Global for all render solid toggles.",
   "tooltip.betterenchants.render.size": "The size of the outline effect. Some arbitrary units.",
 
-  "tooltip.betterenchants.armor.render.line1": "Whether or not to render the effect on worn armor.",
-  "tooltip.betterenchants.armor.render.line2": "Implementation is not stable. Disable this if you have frequent crashes",
-
-  "tooltip.betterenchants.armor.originaluv": "If we should use the original UV of the armor. Otherwise we default to the UV specified in the config. Useful for noisy or broken uvs",
+  "tooltip.betterenchants.armor.render": "Whether or not to render the effect on worn armor.",
+  "tooltip.betterenchants.armor.solid": "Toggles between solid outlines and enchantment glint. The enchantment effect is not very noticeable with this disabled without a custom enchantment shader",
   "tooltip.betterenchants.armor.doubleside": "Whether to render an outline on the inside of the helmet. You may want to disable this with some mods or resource packs.",
+
   "tooltip.betterenchants.special.render": "Whether or not to render the effect special items. Special items are items which call separate render code (eg. trident, shulker box, shield).",
-  "tooltip.betterenchants.special.originaluv": "If we should use the original UV of the item. Otherwise we default to the UV specified in the config. Useful for noisy or broken uvs",
+  "tooltip.betterenchants.special.solid1": "Toggles between solid outlines and enchantment glint.",
+  "tooltip.betterenchants.special.originaluv": "If we should use the original UV of the item. Otherwise we default to the UV specified in the config. Useful for noisy or broken uvs.",
+
   "tooltip.betterenchants.uvs.u": "The fallback UVs U value.",
   "tooltip.betterenchants.uvs.v": "The fallback UVs V value."
 }
