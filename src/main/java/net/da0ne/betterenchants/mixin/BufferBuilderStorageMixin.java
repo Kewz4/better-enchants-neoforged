@@ -40,7 +40,7 @@ public class BufferBuilderStorageMixin {
                             buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
                         }
                     }
-                    else if(set.getKey() == enchantGlintLayer)
+                    if(set.getKey() == enchantGlintLayer)
                     {
                         for(RenderLayer layer : BetterEnchants.enchantmentMaskLayers.renderLayers())
                         {
