@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.HashSet;
 import java.util.SequencedMap;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Mixin(VertexConsumerProvider.Immediate.class)
 public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProvider_ImmediateAcessor {
@@ -40,7 +41,7 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
     @ModifyExpressionValue(method = "draw()V", at = @At(value = "INVOKE", target = "Ljava/util/SequencedMap;keySet()Ljava/util/Set;"))
     private Set<RenderLayer> Da0ne$removeDrawLoop(Set<RenderLayer> original)
     {
-        Set<RenderLayer> copiedSet = new HashSet<>(original);
+        Set<RenderLayer> copiedSet = new TreeSet<>(original);
         for(RenderLayer renderLayer : original)
         {
             if(((RenderLayerAcessor)renderLayer).Da0ne$shouldDrawBeforeCustom()) {
