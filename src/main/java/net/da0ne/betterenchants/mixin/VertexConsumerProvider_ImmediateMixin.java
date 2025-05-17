@@ -38,7 +38,7 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
         }
     }
 
-    @ModifyReceiver(method = "draw()V", at = @At(value = "INVOKE", target = "Ljava/util/SequencedMap;keySet()Ljava/util/Set;"))
+    /*@ModifyReceiver(method = "draw()V", at = @At(value = "INVOKE", target = "Ljava/util/SequencedMap;keySet()Ljava/util/Set;"))
     private SequencedMap<RenderLayer, BufferAllocator> Da0ne$removeDrawLoop(SequencedMap<RenderLayer, BufferAllocator> receiver)
     {
         SequencedMap<RenderLayer, BufferAllocator> copiedMap = new Object2ObjectLinkedOpenHashMap<>();
@@ -48,8 +48,8 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
                 copiedMap.put(entry.getKey(), entry.getValue());
             }
         }
-        return receiver;
-    }
+        return copiedMap;
+    }*/
 
     @Unique
     private int mask_dirty = 0;
