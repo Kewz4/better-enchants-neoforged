@@ -2,7 +2,9 @@
 	"required": true,
 	"package": "net.da0ne.betterenchants.mixin",
 	"compatibilityLevel": "JAVA_21",
+	"plugin": "net.da0ne.betterenchants.BetterEnchantsMixinPlugin",
 	"mixins": [
+		"immediatelyfast.ImmediatelyFastFixin",
 		"RenderLayerMixin",
 		"BufferBuilderStorageMixin",
 		"EquipmentRendererMixin",

@@ -2,8 +2,8 @@ package net.da0ne.betterenchants.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import net.da0ne.betterenchants.mixin_acessors.RenderLayerAcessor;
-import net.da0ne.betterenchants.mixin_acessors.VertexConsumerProvider_ImmediateAcessor;
+import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
+import net.da0ne.betterenchants.mixin_accessors.VertexConsumerProvider_ImmediateAccessor;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.BufferAllocator;
@@ -15,12 +15,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashSet;
 import java.util.SequencedMap;
-import java.util.Set;
 
 @Mixin(VertexConsumerProvider.Immediate.class)
-public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProvider_ImmediateAcessor {
+public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProvider_ImmediateAccessor {
     @Shadow
     @Final
     protected SequencedMap<RenderLayer, BufferAllocator> layerBuffers;
@@ -32,24 +30,11 @@ public class VertexConsumerProvider_ImmediateMixin implements VertexConsumerProv
     private void Da0ne$drawBeforeCustom(CallbackInfo ci)
     {
         for (RenderLayer renderLayer : this.layerBuffers.keySet()) {
-            if(((RenderLayerAcessor)renderLayer).Da0ne$shouldDrawBeforeCustom()){
+            if(((RenderLayerAccessor)renderLayer).Da0ne$shouldDrawBeforeCustom()){
                 draw(renderLayer);
             }
         }
     }
-
-    /*@ModifyReceiver(method = "draw()V", at = @At(value = "INVOKE", target = "Ljava/util/SequencedMap;keySet()Ljava/util/Set;"))
-    private SequencedMap<RenderLayer, BufferAllocator> Da0ne$removeDrawLoop(SequencedMap<RenderLayer, BufferAllocator> receiver)
-    {
-        SequencedMap<RenderLayer, BufferAllocator> copiedMap = new Object2ObjectLinkedOpenHashMap<>();
-        for(var entry : receiver.entrySet())
-        {
-            if(!((RenderLayerAcessor)entry.getKey()).Da0ne$shouldDrawBeforeCustom()) {
-                copiedMap.put(entry.getKey(), entry.getValue());
-            }
-        }
-        return copiedMap;
-    }*/
 
     @Unique
     private int mask_dirty = 0;

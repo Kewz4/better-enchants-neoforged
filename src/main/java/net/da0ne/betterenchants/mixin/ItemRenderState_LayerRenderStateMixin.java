@@ -28,19 +28,19 @@ public class ItemRenderState_LayerRenderStateMixin {
             if(specialModelType != null)
             {
                 if(!BetterEnchants.getConfig().getSpecialRenderSolid()) {
-                    BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumers, BetterEnchants.enchantSolidLayer, true, true));
+                    BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumers, BetterEnchants.ENCHANT_SOLID_LAYER, true, true));
                 }
                 else{
-                    BetterEnchants.isEnchanted.set(vertexConsumers.getBuffer(BetterEnchants.solidSolidLayer));
+                    BetterEnchants.isEnchanted.set(vertexConsumers.getBuffer(BetterEnchants.SOLID_SOLID_LAYER));
                 }
             }
             else
             {
                 if(!BetterEnchants.getConfig().getItemRenderSolid()) {
-                    BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumers, BetterEnchants.enchantCutoutLayer, true, true));
+                    BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumers, BetterEnchants.ENCHANT_CUTOUT_LAYER, true, true));
                 }
                 else{
-                    BetterEnchants.isEnchanted.set(vertexConsumers.getBuffer(BetterEnchants.solidCutoutLayer));
+                    BetterEnchants.isEnchanted.set(vertexConsumers.getBuffer(BetterEnchants.SOLID_CUTOUT_LAYER));
                 }
             }
         }

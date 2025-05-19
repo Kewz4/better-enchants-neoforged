@@ -23,6 +23,21 @@ repositories {
 	}
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
+
+	// Other repositories can go above or below Modrinth's. We don't need priority :)
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = "https://api.modrinth.com/maven"
+			}
+		}
+		//forRepositories(fg.repository) // Only add this if you're using ForgeGradle, otherwise remove this line
+		filter {
+			includeGroup "maven.modrinth"
+		}
+	}
+
 }
 
 dependencies {
@@ -31,6 +46,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
+	modApi("maven.modrinth:5ZwdcRci:${project.immediatelyfast_version}")
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")

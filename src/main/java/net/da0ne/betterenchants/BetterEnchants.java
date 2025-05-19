@@ -3,10 +3,11 @@ package net.da0ne.betterenchants;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.da0ne.betterenchants.config.BetterEnchantsConfig;
-import net.da0ne.betterenchants.mixin_acessors.RenderLayerAcessor;
+import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.da0ne.betterenchants.util.CustomRenderLayers;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.*;
 import net.minecraft.util.Identifier;
@@ -26,7 +27,7 @@ public class BetterEnchants implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-
+    //TODO: move all these to a seperate class.
 	public static final RenderPipeline.Snippet OUTLINE_SNIPPET = RenderPipeline.builder(RenderPipelines.MATRICES_COLOR_FOG_OFFSET_SNIPPET)
 			.withVertexShader(Identifier.of(MOD_ID,"core/outline"))
 			.withFragmentShader(Identifier.of(MOD_ID,"core/outline"))
@@ -78,7 +79,7 @@ public class BetterEnchants implements ModInitializer {
 					.build()
 	);
 
-	public static final RenderLayer enchantCutoutLayer = RenderLayer.of(
+	public static final RenderLayer ENCHANT_CUTOUT_LAYER = RenderLayer.of(
 			"custom_enchants_cutout",
 			786432,
 			true,
@@ -90,7 +91,7 @@ public class BetterEnchants implements ModInitializer {
 					.build(true)
 	);
 
-	public static final RenderLayer enchantSolidLayer = RenderLayer.of(
+	public static final RenderLayer ENCHANT_SOLID_LAYER = RenderLayer.of(
 			"custom_enchants_cutout",
 			786432,
 			true,
@@ -102,7 +103,7 @@ public class BetterEnchants implements ModInitializer {
 					.build(true)
 	);
 
-	public static final RenderLayer solidCutoutLayer = RenderLayer.of(
+	public static final RenderLayer SOLID_CUTOUT_LAYER = RenderLayer.of(
 			"custom_enchants_cutout",
 			786432,
 			true,
@@ -114,7 +115,7 @@ public class BetterEnchants implements ModInitializer {
 					.build(true)
 	);
 
-	public static final RenderLayer solidSolidLayer = RenderLayer.of(
+	public static final RenderLayer SOLID_SOLID_LAYER = RenderLayer.of(
 			"custom_enchants_cutout",
 			786432,
 			true,
@@ -151,12 +152,15 @@ public class BetterEnchants implements ModInitializer {
 						.lightmap(RenderLayer.ENABLE_LIGHTMAP)
 						.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
 						.build(true));
-		((RenderLayerAcessor)layer).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAccessor)layer).Da0ne$setDrawBeforeCustom(true);
+		if( FabricLoader.getInstance().isModLoaded("immediatelyfast")) {
+			((RenderLayerAccessor) layer).Da0ne$setNotLayerBuffer(true);
+		}
 		return layer;
 	}
 
-	public static final CustomRenderLayers enchantmentMaskLayers = new CustomRenderLayers();
-	public static final CustomRenderLayers solidOutlineLayers = new CustomRenderLayers();
+	public static final CustomRenderLayers ENCHANTMENT_MASK_LAYERS = new CustomRenderLayers();
+	public static final CustomRenderLayers SOLID_OUTLINE_LAYERS = new CustomRenderLayers();
 
 	private static BetterEnchantsConfig config;
 
@@ -176,33 +180,33 @@ public class BetterEnchants implements ModInitializer {
 
 		loadConfig();
 
-		((RenderLayerAcessor)solidSolidLayer).Da0ne$setDrawBeforeCustom(true);
-		((RenderLayerAcessor)solidCutoutLayer).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAccessor) SOLID_SOLID_LAYER).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAccessor) SOLID_CUTOUT_LAYER).Da0ne$setDrawBeforeCustom(true);
 
-		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), enchantCutoutLayer);
-		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), enchantSolidLayer);
-		solidOutlineLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), solidCutoutLayer);
-		solidOutlineLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), solidSolidLayer);
+		ENCHANTMENT_MASK_LAYERS.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), ENCHANT_CUTOUT_LAYER);
+		ENCHANTMENT_MASK_LAYERS.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), ENCHANT_SOLID_LAYER);
+		SOLID_OUTLINE_LAYERS.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), SOLID_CUTOUT_LAYER);
+		SOLID_OUTLINE_LAYERS.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), SOLID_SOLID_LAYER);
 	}
 
 	public static RenderLayer getOrCreateEnchantmentArmorRenderLayer(Identifier identifier)
 	{
-		RenderLayer output = enchantmentMaskLayers.getCustomRenderLayer(identifier);
+		RenderLayer output = ENCHANTMENT_MASK_LAYERS.getCustomRenderLayer(identifier);
 		if(output != null)
 		{
 			return output;
 		}
-		return enchantmentMaskLayers.addCustomRenderLayer(identifier, createEnchantmentArmorRenderLayer(identifier));
+		return ENCHANTMENT_MASK_LAYERS.addCustomRenderLayer(identifier, createEnchantmentArmorRenderLayer(identifier));
 	}
 
 	public static RenderLayer getOrCreateSolidArmorRenderLayer(Identifier identifier)
 	{
-		RenderLayer output = solidOutlineLayers.getCustomRenderLayer(identifier);
+		RenderLayer output = SOLID_OUTLINE_LAYERS.getCustomRenderLayer(identifier);
 		if(output != null)
 		{
 			return output;
 		}
-		return solidOutlineLayers.addCustomRenderLayer(identifier, createSolidArmorRenderLayer(identifier));
+		return SOLID_OUTLINE_LAYERS.addCustomRenderLayer(identifier, createSolidArmorRenderLayer(identifier));
 	}
 
 	private static void loadConfig() {
