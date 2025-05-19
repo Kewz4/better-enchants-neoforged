@@ -26,13 +26,13 @@ public class BetterEnchants implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	//TODO: move all these to a seperate class.
+	public static final ShaderProgramKey CUTOUT_SHADER_KEY = new ShaderProgramKey(Identifier.of(MOD_ID,"core/cutout"), VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
+	public static final RenderPhase.ShaderProgram CUTOUT_SHADER = new RenderPhase.ShaderProgram(CUTOUT_SHADER_KEY);
+	public static final ShaderProgramKey SOLID_SHADER_KEY = new ShaderProgramKey(Identifier.of(MOD_ID,"core/solid"), VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
+	public static final RenderPhase.ShaderProgram SOLID_SHADER = new RenderPhase.ShaderProgram(SOLID_SHADER_KEY);
 
-	public static final ShaderProgramKey cutoutShaderKey = new ShaderProgramKey(Identifier.of(MOD_ID,"core/cutout"), VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
-	public static final RenderPhase.ShaderProgram cutoutShader = new RenderPhase.ShaderProgram(cutoutShaderKey);
-	public static final ShaderProgramKey solidShaderKey = new ShaderProgramKey(Identifier.of(MOD_ID,"core/solid"), VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
-	public static final RenderPhase.ShaderProgram solidShader = new RenderPhase.ShaderProgram(solidShaderKey);
-
-	public static final RenderLayer enchantCutoutLayer = RenderLayer.of(
+	public static final RenderLayer ENCHANT_CUTOUT_LAYER = RenderLayer.of(
 			"custom_enchants_cutout",
 			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
 			VertexFormat.DrawMode.QUADS,
@@ -41,14 +41,14 @@ public class BetterEnchants implements ModInitializer {
 			false,
 			RenderLayer.MultiPhaseParameters.builder()
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-					.program(cutoutShader)
+					.program(CUTOUT_SHADER)
 					.writeMaskState(RenderLayer.DEPTH_MASK)
 					.texture(RenderLayer.BLOCK_ATLAS_TEXTURE)
 					.cull(RenderLayer.ENABLE_CULLING)
 					.build(true)
 	);
 
-	public static final RenderLayer enchantSolidLayer = RenderLayer.of(
+	public static final RenderLayer ENCHANT_SOLID_LAYER = RenderLayer.of(
 			"custom_enchants_cutout",
 			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
 			VertexFormat.DrawMode.QUADS,
@@ -57,14 +57,14 @@ public class BetterEnchants implements ModInitializer {
 			false,
 			RenderLayer.MultiPhaseParameters.builder()
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-					.program(solidShader)
+					.program(SOLID_SHADER)
 					.writeMaskState(RenderLayer.DEPTH_MASK)
 					.cull(RenderLayer.ENABLE_CULLING)
 					//.texture(RenderLayer.BLOCK_ATLAS_TEXTURE)
 					.build(true)
 	);
 
-	public static final RenderLayer solidCutoutLayer = RenderLayer.of(
+	public static final RenderLayer SOLID_CUTOUT_LAYER = RenderLayer.of(
 			"custom_enchants_cutout",
 			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
 			VertexFormat.DrawMode.QUADS,
@@ -73,14 +73,14 @@ public class BetterEnchants implements ModInitializer {
 			false,
 			RenderLayer.MultiPhaseParameters.builder()
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
-					.program(cutoutShader)
+					.program(CUTOUT_SHADER)
 					.writeMaskState(RenderLayer.COLOR_MASK)
 					.texture(RenderLayer.BLOCK_ATLAS_TEXTURE)
 					.cull(RenderLayer.ENABLE_CULLING)
 					.build(true)
 	);
 
-	public static final RenderLayer solidSolidLayer = RenderLayer.of(
+	public static final RenderLayer SOLID_SOLID_LAYER = RenderLayer.of(
 			"custom_enchants_cutout",
 			VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
 			VertexFormat.DrawMode.QUADS,
@@ -88,7 +88,7 @@ public class BetterEnchants implements ModInitializer {
 			true,
 			false,
 			RenderLayer.MultiPhaseParameters.builder()
-					.program(solidShader)
+					.program(SOLID_SHADER)
 					.transparency(RenderLayer.NO_TRANSPARENCY)
 					.cull(RenderLayer.ENABLE_CULLING)
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
@@ -106,7 +106,7 @@ public class BetterEnchants implements ModInitializer {
 			true,
 			false,
 			RenderLayer.MultiPhaseParameters.builder()
-					.program(cutoutShader)
+					.program(CUTOUT_SHADER)
 					.cull(RenderLayer.ENABLE_CULLING)
 					.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
@@ -124,7 +124,7 @@ public class BetterEnchants implements ModInitializer {
 				true,
 				false,
 				RenderLayer.MultiPhaseParameters.builder()
-						.program(cutoutShader)
+						.program(CUTOUT_SHADER)
 						.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
 						.transparency(RenderLayer.NO_TRANSPARENCY)
 						.cull(RenderLayer.ENABLE_CULLING)
@@ -139,8 +139,8 @@ public class BetterEnchants implements ModInitializer {
 		return layer;
 	}
 
-	public static final CustomRenderLayers enchantmentMaskLayers = new CustomRenderLayers();
-	public static final CustomRenderLayers solidOutlineLayers = new CustomRenderLayers();
+	public static final CustomRenderLayers ENCHANTMENT_MASK_LAYERS = new CustomRenderLayers();
+	public static final CustomRenderLayers SOLID_OUTLINE_LAYERS = new CustomRenderLayers();
 
 	private static BetterEnchantsConfig config;
 
@@ -160,33 +160,33 @@ public class BetterEnchants implements ModInitializer {
 
 		loadConfig();
 
-		((RenderLayerAccessor)solidSolidLayer).Da0ne$setDrawBeforeCustom(true);
-		((RenderLayerAccessor)solidCutoutLayer).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAccessor) SOLID_SOLID_LAYER).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAccessor) SOLID_CUTOUT_LAYER).Da0ne$setDrawBeforeCustom(true);
 
-		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), enchantCutoutLayer);
-		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), enchantSolidLayer);
-		solidOutlineLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), solidCutoutLayer);
-		solidOutlineLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), solidSolidLayer);
+		ENCHANTMENT_MASK_LAYERS.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), ENCHANT_CUTOUT_LAYER);
+		ENCHANTMENT_MASK_LAYERS.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), ENCHANT_SOLID_LAYER);
+		SOLID_OUTLINE_LAYERS.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), SOLID_CUTOUT_LAYER);
+		SOLID_OUTLINE_LAYERS.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), SOLID_SOLID_LAYER);
 	}
 
 	public static RenderLayer getOrCreateEnchantmentArmorRenderLayer(Identifier identifier)
 	{
-		RenderLayer output = enchantmentMaskLayers.getCustomRenderLayer(identifier);
+		RenderLayer output = ENCHANTMENT_MASK_LAYERS.getCustomRenderLayer(identifier);
 		if(output != null)
 		{
 			return output;
 		}
-		return enchantmentMaskLayers.addCustomRenderLayer(identifier, createEnchantmentArmorRenderLayer(identifier));
+		return ENCHANTMENT_MASK_LAYERS.addCustomRenderLayer(identifier, createEnchantmentArmorRenderLayer(identifier));
 	}
 
 	public static RenderLayer getOrCreateSolidArmorRenderLayer(Identifier identifier)
 	{
-		RenderLayer output = solidOutlineLayers.getCustomRenderLayer(identifier);
+		RenderLayer output = SOLID_OUTLINE_LAYERS.getCustomRenderLayer(identifier);
 		if(output != null)
 		{
 			return output;
 		}
-		return solidOutlineLayers.addCustomRenderLayer(identifier, createSolidArmorRenderLayer(identifier));
+		return SOLID_OUTLINE_LAYERS.addCustomRenderLayer(identifier, createSolidArmorRenderLayer(identifier));
 	}
 
 	private static void loadConfig() {

@@ -24,18 +24,18 @@ public class BufferBuilderStorageMixin {
         VertexConsumerProvider_ImmediateAccessor originalCast = ((VertexConsumerProvider_ImmediateAccessor)original);
         var enchantGlintLayer = RenderLayer.getArmorEntityGlint();
         var buffers = originalCast.Da0ne$getLayerBuffers();
-        if((originalCast.Da0ne$getMaskDirty() != BetterEnchants.enchantmentMaskLayers.getDirty() && buffers.containsKey(enchantGlintLayer)) || (originalCast.Da0ne$getSolidDirty() != BetterEnchants.solidOutlineLayers.getDirty() && buffers.containsKey(TexturedRenderLayers.getEntitySolid()))){
-            originalCast.Da0ne$setMaskDirty(BetterEnchants.enchantmentMaskLayers.getDirty());
-            originalCast.Da0ne$setSolidDirty(BetterEnchants.solidOutlineLayers.getDirty());
+        if((originalCast.Da0ne$getMaskDirty() != BetterEnchants.ENCHANTMENT_MASK_LAYERS.getDirty() && buffers.containsKey(enchantGlintLayer)) || (originalCast.Da0ne$getSolidDirty() != BetterEnchants.SOLID_OUTLINE_LAYERS.getDirty() && buffers.containsKey(TexturedRenderLayers.getEntitySolid()))){
+            originalCast.Da0ne$setMaskDirty(BetterEnchants.ENCHANTMENT_MASK_LAYERS.getDirty());
+            originalCast.Da0ne$setSolidDirty(BetterEnchants.SOLID_OUTLINE_LAYERS.getDirty());
             SequencedMap<RenderLayer, BufferAllocator> clonedBuffer = new Object2ObjectLinkedOpenHashMap<>(buffers);
             buffers.clear();
             for(var set : clonedBuffer.entrySet())
             {
-                if(!BetterEnchants.enchantmentMaskLayers.containsRenderLayer(set.getKey()) && !BetterEnchants.solidOutlineLayers.containsRenderLayer(set.getKey()))
+                if(!BetterEnchants.ENCHANTMENT_MASK_LAYERS.containsRenderLayer(set.getKey()) && !BetterEnchants.SOLID_OUTLINE_LAYERS.containsRenderLayer(set.getKey()))
                 {
                     if(set.getKey() == TexturedRenderLayers.getEntitySolid())
                     {
-                        for(RenderLayer layer : BetterEnchants.solidOutlineLayers.renderLayers())
+                        for(RenderLayer layer : BetterEnchants.SOLID_OUTLINE_LAYERS.renderLayers())
                         {
                             if(!((RenderLayerAccessor)layer).Da0ne$notLayerBuffer()){
                                 buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
@@ -44,7 +44,7 @@ public class BufferBuilderStorageMixin {
                     }
                     if(set.getKey() == enchantGlintLayer)
                     {
-                        for(RenderLayer layer : BetterEnchants.enchantmentMaskLayers.renderLayers())
+                        for(RenderLayer layer : BetterEnchants.ENCHANTMENT_MASK_LAYERS.renderLayers())
                         {
                             buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
                         }

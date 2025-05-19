@@ -20,10 +20,10 @@ public class TridentEntityRendererMixin {
         if(tridentEntityRenderState.enchanted)
         {
             if(!BetterEnchants.getConfig().getSpecialRenderSolid()) {
-                BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumerProvider, BetterEnchants.enchantSolidLayer, true, true));
+                BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(vertexConsumerProvider, BetterEnchants.ENCHANT_SOLID_LAYER, true, true));
             }
             else{
-                BetterEnchants.isEnchanted.set(vertexConsumerProvider.getBuffer(BetterEnchants.solidSolidLayer));
+                BetterEnchants.isEnchanted.set(vertexConsumerProvider.getBuffer(BetterEnchants.SOLID_SOLID_LAYER));
             }
         }
     }
