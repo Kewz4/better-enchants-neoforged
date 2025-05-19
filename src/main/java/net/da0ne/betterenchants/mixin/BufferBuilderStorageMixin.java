@@ -1,10 +1,9 @@
 package net.da0ne.betterenchants.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.da0ne.betterenchants.BetterEnchants;
-import net.da0ne.betterenchants.mixin_acessors.VertexConsumerProvider_ImmediateAcessor;
+import net.da0ne.betterenchants.mixin_accessors.VertexConsumerProvider_ImmediateAccessor;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.TexturedRenderLayers;
@@ -21,7 +20,7 @@ public class BufferBuilderStorageMixin {
     @ModifyReturnValue(method = "getEntityVertexConsumers", at = @At("RETURN"))
     private VertexConsumerProvider.Immediate Da0ne$getEntityVertexConsumers(VertexConsumerProvider.Immediate original)
     {
-        VertexConsumerProvider_ImmediateAcessor originalCast = ((VertexConsumerProvider_ImmediateAcessor)original);
+        VertexConsumerProvider_ImmediateAccessor originalCast = ((VertexConsumerProvider_ImmediateAccessor)original);
         var enchantGlintLayer = RenderLayer.getArmorEntityGlint();
         var buffers = originalCast.Da0ne$getLayerBuffers();
         if((originalCast.Da0ne$getMaskDirty() != BetterEnchants.enchantmentMaskLayers.getDirty() && buffers.containsKey(enchantGlintLayer)) || (originalCast.Da0ne$getSolidDirty() != BetterEnchants.solidOutlineLayers.getDirty() && buffers.containsKey(TexturedRenderLayers.getEntitySolid()))){

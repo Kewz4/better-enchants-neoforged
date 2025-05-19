@@ -1,14 +1,14 @@
 package net.da0ne.betterenchants.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.da0ne.betterenchants.mixin_acessors.RenderLayerAcessor;
+import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.minecraft.client.render.RenderLayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(RenderLayer.class)
-public class RenderLayerMixin implements RenderLayerAcessor {
+public class RenderLayerMixin implements RenderLayerAccessor {
 
     @ModifyReturnValue(method = "areVerticesNotShared", at = @At("RETURN"))
     private boolean Da0ne$areVerticesNotShared(boolean original){

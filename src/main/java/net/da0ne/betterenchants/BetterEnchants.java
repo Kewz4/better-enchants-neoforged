@@ -1,7 +1,7 @@
 package net.da0ne.betterenchants;
 
 import net.da0ne.betterenchants.config.BetterEnchantsConfig;
-import net.da0ne.betterenchants.mixin_acessors.RenderLayerAcessor;
+import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.da0ne.betterenchants.util.CustomRenderLayers;
 import net.fabricmc.api.ModInitializer;
 
@@ -131,7 +131,7 @@ public class BetterEnchants implements ModInitializer {
 						.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
 						.writeMaskState(RenderLayer.COLOR_MASK)
 						.build(true));
-		((RenderLayerAcessor)layer).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAccessor)layer).Da0ne$setDrawBeforeCustom(true);
 		return layer;
 	}
 
@@ -156,8 +156,8 @@ public class BetterEnchants implements ModInitializer {
 
 		loadConfig();
 
-		((RenderLayerAcessor)solidSolidLayer).Da0ne$setDrawBeforeCustom(true);
-		((RenderLayerAcessor)solidCutoutLayer).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAccessor)solidSolidLayer).Da0ne$setDrawBeforeCustom(true);
+		((RenderLayerAccessor)solidCutoutLayer).Da0ne$setDrawBeforeCustom(true);
 
 		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"cutoutlayer"), enchantCutoutLayer);
 		enchantmentMaskLayers.addCustomRenderLayer(Identifier.of(MOD_ID,"solidlayer"), enchantSolidLayer);
