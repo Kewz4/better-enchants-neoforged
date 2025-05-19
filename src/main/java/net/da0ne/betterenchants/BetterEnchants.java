@@ -5,6 +5,7 @@ import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.da0ne.betterenchants.util.CustomRenderLayers;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gl.Defines;
 import net.minecraft.client.gl.ShaderProgramKey;
 import net.minecraft.client.render.*;
@@ -132,6 +133,9 @@ public class BetterEnchants implements ModInitializer {
 						.writeMaskState(RenderLayer.COLOR_MASK)
 						.build(true));
 		((RenderLayerAccessor)layer).Da0ne$setDrawBeforeCustom(true);
+		if( FabricLoader.getInstance().isModLoaded("immediatelyfast")) {
+			((RenderLayerAccessor) layer).Da0ne$setNotLayerBuffer(true);
+		}
 		return layer;
 	}
 

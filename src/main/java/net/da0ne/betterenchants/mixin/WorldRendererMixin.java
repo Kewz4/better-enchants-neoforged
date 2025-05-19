@@ -2,6 +2,7 @@ package net.da0ne.betterenchants.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import net.da0ne.betterenchants.BetterEnchants;
+import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.minecraft.client.render.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +24,9 @@ public class WorldRendererMixin {
     {
         for(var customLayer : BetterEnchants.solidOutlineLayers.renderLayers())
         {
-            receiver.draw(customLayer);
+            if(!((RenderLayerAccessor)customLayer).Da0ne$notLayerBuffer()) {
+                receiver.draw(customLayer);
+            }
         }
         return receiver;
     }

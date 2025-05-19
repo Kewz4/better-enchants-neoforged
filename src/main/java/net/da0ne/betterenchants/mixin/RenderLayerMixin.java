@@ -22,6 +22,9 @@ public class RenderLayerMixin implements RenderLayerAccessor {
     @Unique
     private boolean drawBeforeCustom = false;
 
+    @Unique
+    private boolean notLayerBuffer = false;
+
     @Override
     public boolean Da0ne$shouldDrawBeforeCustom() {
         return drawBeforeCustom;
@@ -30,5 +33,15 @@ public class RenderLayerMixin implements RenderLayerAccessor {
     @Override
     public void Da0ne$setDrawBeforeCustom(boolean newDrawBeforeCustom) {
         drawBeforeCustom = newDrawBeforeCustom;
+    }
+
+    @Override
+    public boolean Da0ne$notLayerBuffer() {
+        return notLayerBuffer;
+    }
+
+    @Override
+    public void Da0ne$setNotLayerBuffer(boolean newNotLayerBuffer) {
+        notLayerBuffer = newNotLayerBuffer;
     }
 }

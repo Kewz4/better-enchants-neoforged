@@ -1,9 +1,13 @@
 package net.da0ne.betterenchants.mixin.immediatelyfast;
 
+import com.llamalad7.mixinextras.injector.ModifyReceiver;
+import com.mojang.logging.LogUtils;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.da0ne.betterenchants.mixin_accessors.VertexConsumerProvider_ImmediateAccessor;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.util.BufferAllocator;
 import net.raphimc.immediatelyfast.feature.core.BatchableBufferSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -12,8 +16,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.SequencedMap;
+
 @Mixin(BatchableBufferSource.class)
 public class ImmediatelyFastFixin {
+    @Shadow(remap = false)
+    protected boolean drawFallbackLayersFirst;
+
     @Shadow
     public void drawDirect(RenderLayer layer) {}
 

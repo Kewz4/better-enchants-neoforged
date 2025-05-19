@@ -3,6 +3,7 @@ package net.da0ne.betterenchants.mixin;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.da0ne.betterenchants.BetterEnchants;
+import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.da0ne.betterenchants.mixin_accessors.VertexConsumerProvider_ImmediateAccessor;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.RenderLayer;
@@ -36,7 +37,9 @@ public class BufferBuilderStorageMixin {
                     {
                         for(RenderLayer layer : BetterEnchants.solidOutlineLayers.renderLayers())
                         {
-                            buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
+                            if(!((RenderLayerAccessor)layer).Da0ne$notLayerBuffer()){
+                                buffers.put(layer, new BufferAllocator(layer.getExpectedBufferSize()));
+                            }
                         }
                     }
                     if(set.getKey() == enchantGlintLayer)
