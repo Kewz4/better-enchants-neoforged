@@ -47,6 +47,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modApi("maven.modrinth:5ZwdcRci:${project.immediatelyfast_version}")
+	modApi("maven.modrinth:YL57xq9U:${project.iris_version}")
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")

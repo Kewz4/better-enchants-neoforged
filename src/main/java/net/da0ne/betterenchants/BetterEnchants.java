@@ -6,6 +6,7 @@ import net.da0ne.betterenchants.util.CustomRenderLayers;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.irisshaders.iris.layer.BufferSourceWrapper;
 import net.minecraft.client.gl.Defines;
 import net.minecraft.client.gl.ShaderProgramKey;
 import net.minecraft.client.render.*;
@@ -25,6 +26,8 @@ public class BetterEnchants implements ModInitializer {
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+
 
 	//TODO: move all these to a seperate class.
 	public static final ShaderProgramKey CUTOUT_SHADER_KEY = new ShaderProgramKey(Identifier.of(MOD_ID,"core/cutout"), VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
@@ -189,13 +192,31 @@ public class BetterEnchants implements ModInitializer {
 		return SOLID_OUTLINE_LAYERS.addCustomRenderLayer(identifier, createSolidArmorRenderLayer(identifier));
 	}
 
+	public static VertexConsumerProvider.Immediate getImmediate(VertexConsumerProvider vertexConsumers)
+	{
+		VertexConsumerProvider.Immediate immediate = null;
+		if(getIrisOriginal(vertexConsumers) instanceof VertexConsumerProvider.Immediate im) {
+			immediate = im;
+		}
+		return immediate;
+	}
+
+	private static VertexConsumerProvider getIrisOriginal(VertexConsumerProvider vertexConsumerProvider)
+	{
+		if(vertexConsumerProvider instanceof BufferSourceWrapper wrapper)
+		{
+			return getIrisOriginal(wrapper.getOriginal());
+		}
+		return vertexConsumerProvider;
+	}
+
 	private static void loadConfig() {
 		Path configFile = BetterEnchantsConfig.CONFIG_FILE;
 		if (Files.exists(configFile)) {
 			try(BufferedReader reader = Files.newBufferedReader(configFile)) {
 				config = BetterEnchantsConfig.fromJson(reader);
 			} catch (Exception e) {
-				LOGGER.error("Error loading WebSpeak config file. Default values will be used for this session.", e);
+				LOGGER.error("Error loading BetterEnchants config file. Default values will be used for this session.", e);
 				config = new BetterEnchantsConfig();
 			}
 		} else {
