@@ -1,7 +1,5 @@
 package net.da0ne.betterenchants.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyReceiver;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.da0ne.betterenchants.mixin_accessors.VertexConsumerProvider_ImmediateAccessor;
 import net.minecraft.client.render.RenderLayer;

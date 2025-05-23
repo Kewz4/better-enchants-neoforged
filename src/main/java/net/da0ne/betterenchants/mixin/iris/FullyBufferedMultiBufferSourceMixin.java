@@ -1,7 +1,6 @@
 package net.da0ne.betterenchants.mixin.iris;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.mojang.logging.LogUtils;
 import net.da0ne.betterenchants.BetterEnchants;
 import net.irisshaders.batchedentityrendering.impl.FullyBufferedMultiBufferSource;
 import net.irisshaders.batchedentityrendering.impl.WrappableRenderType;
