@@ -56,7 +56,7 @@ public class ClothConfigScreenFactory {
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().armor_render_solid = newValue)
                 .build());
         armor.addEntry(entryBuilder.startBooleanToggle(Text.translatable("option.betterenchants.armor.doubleside"), BetterEnchants.getConfig().renderArmorDoubleSided())
-                .setDefaultValue(true)
+                .setDefaultValue(false)
                 .setTooltip(Text.translatable("tooltip.betterenchants.armor.doubleside"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().armor_double_sided = newValue)
                 .build());

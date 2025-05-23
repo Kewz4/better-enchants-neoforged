@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_21",
 	"plugin": "net.da0ne.betterenchants.BetterEnchantsMixinPlugin",
 	"mixins": [
+        "iris.FullyBufferedMultiBufferSourceMixin",
 		"immediatelyfast.ImmediatelyFastFixin",
 		"RenderLayerMixin",
 		"BufferBuilderStorageMixin",

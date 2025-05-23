@@ -27,7 +27,7 @@ public class BetterEnchants implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-
+	public static final boolean IRIS_LOADED = FabricLoader.getInstance().isModLoaded("iris");
 
 	//TODO: move all these to a seperate class.
 	public static final ShaderProgramKey CUTOUT_SHADER_KEY = new ShaderProgramKey(Identifier.of(MOD_ID,"core/cutout"), VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, Defines.EMPTY);
@@ -203,7 +203,7 @@ public class BetterEnchants implements ModInitializer {
 
 	private static VertexConsumerProvider getIrisOriginal(VertexConsumerProvider vertexConsumerProvider)
 	{
-		if(vertexConsumerProvider instanceof BufferSourceWrapper wrapper)
+		if(IRIS_LOADED && vertexConsumerProvider instanceof BufferSourceWrapper wrapper)
 		{
 			return getIrisOriginal(wrapper.getOriginal());
 		}

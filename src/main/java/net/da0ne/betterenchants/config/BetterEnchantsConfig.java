@@ -23,7 +23,7 @@ public class BetterEnchantsConfig {
     public boolean enabled = true;
     public boolean effect_armor = false;
     public boolean effect_special_item = true;
-    public boolean armor_double_sided = true;
+    public boolean armor_double_sided = false;
     public boolean use_original_special_item_uv = false;
     public boolean item_render_solid = false;
     public boolean armor_render_solid = true;
