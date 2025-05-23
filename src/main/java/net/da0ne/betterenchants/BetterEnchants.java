@@ -8,6 +8,7 @@ import net.da0ne.betterenchants.util.CustomRenderLayers;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.irisshaders.iris.layer.BufferSourceWrapper;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.*;
 import net.minecraft.util.Identifier;
@@ -26,6 +27,8 @@ public class BetterEnchants implements ModInitializer {
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+	public static final boolean IRIS_LOADED = FabricLoader.getInstance().isModLoaded("iris");
 
     //TODO: move all these to a seperate class.
 	public static final RenderPipeline.Snippet OUTLINE_SNIPPET = RenderPipeline.builder(RenderPipelines.MATRICES_COLOR_FOG_OFFSET_SNIPPET)
@@ -209,13 +212,31 @@ public class BetterEnchants implements ModInitializer {
 		return SOLID_OUTLINE_LAYERS.addCustomRenderLayer(identifier, createSolidArmorRenderLayer(identifier));
 	}
 
+	public static VertexConsumerProvider.Immediate getImmediate(VertexConsumerProvider vertexConsumers)
+	{
+		VertexConsumerProvider.Immediate immediate = null;
+		if(getIrisOriginal(vertexConsumers) instanceof VertexConsumerProvider.Immediate im) {
+			immediate = im;
+		}
+		return immediate;
+	}
+
+	private static VertexConsumerProvider getIrisOriginal(VertexConsumerProvider vertexConsumerProvider)
+	{
+		if(IRIS_LOADED && vertexConsumerProvider instanceof BufferSourceWrapper wrapper)
+		{
+			return getIrisOriginal(wrapper.getOriginal());
+		}
+		return vertexConsumerProvider;
+	}
+
 	private static void loadConfig() {
 		Path configFile = BetterEnchantsConfig.CONFIG_FILE;
 		if (Files.exists(configFile)) {
 			try(BufferedReader reader = Files.newBufferedReader(configFile)) {
 				config = BetterEnchantsConfig.fromJson(reader);
 			} catch (Exception e) {
-				LOGGER.error("Error loading WebSpeak config file. Default values will be used for this session.", e);
+				LOGGER.error("Error loading BetterEnchants config file. Default values will be used for this session.", e);
 				config = new BetterEnchantsConfig();
 			}
 		} else {

@@ -13,7 +13,27 @@ public class BetterEnchantsMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if(mixinClassName.contains("net.da0ne.betterenchants.mixin.immediatelyfast"))
         {
-            return FabricLoader.getInstance().isModLoaded("immediatelyfast");
+            if(FabricLoader.getInstance().isModLoaded("immediatelyfast"))
+            {
+                System.out.println("better-enchants: ImmediatelyFast found. Applying mixin: " + mixinClassName);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if(mixinClassName.contains("net.da0ne.betterenchants.mixin.iris"))
+        {
+            if(FabricLoader.getInstance().isModLoaded("iris"))
+            {
+                System.out.println("better-enchants: Iris found. Applying mixin: " + mixinClassName);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         return true;
     }

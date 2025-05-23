@@ -2,6 +2,7 @@ package net.da0ne.betterenchants.mixin;
 
 import net.da0ne.betterenchants.BetterEnchants;
 import net.da0ne.betterenchants.mixin_accessors.VertexConsumerProvider_ImmediateAccessor;
+import net.irisshaders.batchedentityrendering.impl.FullyBufferedMultiBufferSource;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -41,21 +42,24 @@ public class EquipmentRendererMixin {
         if(textureIdentifier.get() != null)
         {
             if(args.get(2)){
-                if(!BetterEnchants.getConfig().getArmorRenderSolid()) {
-                    RenderLayer layer = BetterEnchants.getOrCreateEnchantmentArmorRenderLayer(textureIdentifier.get());
-                    if (layer != null && ((VertexConsumerProvider_ImmediateAccessor)(args.get(0))).Da0ne$getMaskDirty() == BetterEnchants.ENCHANTMENT_MASK_LAYERS.getDirty()) {
-                        BetterEnchants.isArmor.set(true);
+                VertexConsumerProvider.Immediate immediate = BetterEnchants.getImmediate(args.get(0));
+                if(immediate != null){
+                    if(!BetterEnchants.getConfig().getArmorRenderSolid()) {
+                        RenderLayer layer = BetterEnchants.getOrCreateEnchantmentArmorRenderLayer(textureIdentifier.get());
+                        if (layer != null && (BetterEnchants.IRIS_LOADED ? immediate instanceof FullyBufferedMultiBufferSource : ((VertexConsumerProvider_ImmediateAccessor)(immediate)).Da0ne$getMaskDirty() == BetterEnchants.ENCHANTMENT_MASK_LAYERS.getDirty())) {
+                            BetterEnchants.isArmor.set(true);
 
-                        BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true));
+                            BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true));
+                        }
                     }
-                }
-                else
-                {
-                    RenderLayer layer = BetterEnchants.getOrCreateSolidArmorRenderLayer(textureIdentifier.get());
-                    //RenderLayer layer = RenderLayer.getArmorCutoutNoCull(textureIdentifier.get());
-                    if (layer != null && ((VertexConsumerProvider_ImmediateAccessor)(args.get(0))).Da0ne$getSolidDirty() == BetterEnchants.SOLID_OUTLINE_LAYERS.getDirty()) {
-                        BetterEnchants.isArmor.set(true);
-                        BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, false));
+                    else
+                    {
+                        RenderLayer layer = BetterEnchants.getOrCreateSolidArmorRenderLayer(textureIdentifier.get());
+                        //RenderLayer layer = RenderLayer.getArmorCutoutNoCull(textureIdentifier.get());
+                        if (layer != null && (BetterEnchants.IRIS_LOADED ? immediate instanceof FullyBufferedMultiBufferSource : ((VertexConsumerProvider_ImmediateAccessor)(immediate)).Da0ne$getSolidDirty() == BetterEnchants.SOLID_OUTLINE_LAYERS.getDirty())) {
+                            BetterEnchants.isArmor.set(true);
+                            BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, false));
+                        }
                     }
                 }
             }
@@ -67,10 +71,15 @@ public class EquipmentRendererMixin {
     {
         if(BetterEnchants.getConfig().getArmorRenderSolid()) {
             RenderLayer layer = BetterEnchants.getOrCreateSolidArmorRenderLayer(textureIdentifier.get());
-            if (layer != null&& ((VertexConsumerProvider_ImmediateAccessor)vertexConsumers).Da0ne$getSolidDirty() == BetterEnchants.SOLID_OUTLINE_LAYERS.getDirty()) {
-                ItemRenderer.getArmorGlintConsumer(vertexConsumers, layer, false);
+
+            VertexConsumerProvider.Immediate immediate = BetterEnchants.getImmediate(vertexConsumers);
+            if(immediate != null) {
+                if (layer != null && ((VertexConsumerProvider_ImmediateAccessor)(immediate)).Da0ne$getSolidDirty() == BetterEnchants.SOLID_OUTLINE_LAYERS.getDirty()) {
+                    ItemRenderer.getArmorGlintConsumer(vertexConsumers, layer, false);
+                }
             }
         }
+
         textureIdentifier.remove();
         BetterEnchants.isArmor.remove();
         BetterEnchants.isEnchanted.remove();
