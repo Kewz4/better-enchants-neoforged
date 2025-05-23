@@ -135,9 +135,15 @@ public class BetterEnchants implements ModInitializer {
 						.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
 						.writeMaskState(RenderLayer.COLOR_MASK)
 						.build(true));
-		((RenderLayerAccessor)layer).Da0ne$setDrawBeforeCustom(true);
+
+		RenderLayerAccessor acessor = (RenderLayerAccessor)layer;
+
+		acessor.Da0ne$setDrawBeforeCustom(true);
 		if( FabricLoader.getInstance().isModLoaded("immediatelyfast")) {
-			((RenderLayerAccessor) layer).Da0ne$setNotLayerBuffer(true);
+			acessor.Da0ne$setNotLayerBuffer(true);
+		}
+		if(IRIS_LOADED) {
+			acessor.Da0ne$setArmor(true);
 		}
 		return layer;
 	}

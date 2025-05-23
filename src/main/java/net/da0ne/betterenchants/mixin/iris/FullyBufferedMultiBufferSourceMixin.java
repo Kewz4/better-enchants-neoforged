@@ -2,6 +2,7 @@ package net.da0ne.betterenchants.mixin.iris;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.da0ne.betterenchants.BetterEnchants;
+import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.irisshaders.batchedentityrendering.impl.FullyBufferedMultiBufferSource;
 import net.irisshaders.batchedentityrendering.impl.WrappableRenderType;
 import net.minecraft.client.render.RenderLayer;
@@ -32,15 +33,21 @@ public class FullyBufferedMultiBufferSourceMixin {
                 unWrappedLayer = wrapped.unwrap();
             }
 
-            if(BetterEnchants.ENCHANTMENT_MASK_LAYERS.containsRenderLayer(unWrappedLayer))
+
+            else if(BetterEnchants.ENCHANTMENT_MASK_LAYERS.containsRenderLayer(unWrappedLayer))
             {
                 maskLayers.add(layer);
                 encahntsRemoved.remove(layer);
             }
             else if(BetterEnchants.SOLID_OUTLINE_LAYERS.containsRenderLayer(unWrappedLayer))
             {
-                solidLayers.add(layer);
                 encahntsRemoved.remove(layer);
+                if(((RenderLayerAccessor)unWrappedLayer).Da0ne$isArmor()) {
+                    duplicate.add(layer);
+                }
+                else {
+                    solidLayers.add(layer);
+                }
             }
         }
 
