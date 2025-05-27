@@ -34,7 +34,7 @@ public class FullyBufferedMultiBufferSourceMixin {
             }
 
 
-            else if(BetterEnchants.ENCHANTMENT_MASK_LAYERS.containsRenderLayer(unWrappedLayer))
+            if(BetterEnchants.ENCHANTMENT_MASK_LAYERS.containsRenderLayer(unWrappedLayer))
             {
                 maskLayers.add(layer);
                 encahntsRemoved.remove(layer);
