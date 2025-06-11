@@ -42,7 +42,8 @@ public class ModelPart_CuboidMixin {
             {
                 var verts = quad.vertices();
                 Vector3f[] defaultVerts = new Vector3f[verts.length];
-                for(int i = 0; i < defaultVerts.length; i++){
+                for(int i = 0; i < defaultVerts.length; i++)
+                {
                     defaultVerts[i] = new Vector3f(verts[i].pos());
                     defaultVerts[i].div(16.0F);
                 }
@@ -53,9 +54,8 @@ public class ModelPart_CuboidMixin {
 
                 Vector3f[] cardinalDirs = VertexHelper.getFaceCardinalDirs(defaultVerts, scale);
                 if (cardinalDirs != null) {
-                    for (Vector3f dir : cardinalDirs) {
-
-
+                    for (Vector3f dir : cardinalDirs)
+                    {
                         Vector3f[] vertPoses = VertexHelper.growFace(defaultVerts, dir, faceVec);
 
                         int[] vertexData = new int[vertPoses.length*8];

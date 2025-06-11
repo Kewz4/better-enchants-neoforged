@@ -112,9 +112,10 @@ public class BetterEnchants implements ModInitializer {
 					.program(CUTOUT_SHADER)
 					.cull(RenderLayer.ENABLE_CULLING)
 					.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
+					.transparency(RenderLayer.NO_TRANSPARENCY)
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
+					.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
 					.writeMaskState(RenderLayer.DEPTH_MASK)
-					.cull(RenderLayer.ENABLE_CULLING)
 					.build(true));
 	}
 

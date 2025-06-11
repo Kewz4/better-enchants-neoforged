@@ -1,6 +1,7 @@
 package net.da0ne.betterenchants.mixin.iris;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.mojang.logging.LogUtils;
 import net.da0ne.betterenchants.BetterEnchants;
 import net.da0ne.betterenchants.mixin_accessors.RenderLayerAccessor;
 import net.irisshaders.batchedentityrendering.impl.FullyBufferedMultiBufferSource;
@@ -8,6 +9,7 @@ import net.irisshaders.batchedentityrendering.impl.WrappableRenderType;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.TexturedRenderLayers;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.ArrayList;
@@ -27,12 +29,7 @@ public class FullyBufferedMultiBufferSourceMixin {
         RenderLayer unWrappedLayer;
         for(RenderLayer layer : original)
         {
-            unWrappedLayer = layer;
-            if(layer instanceof WrappableRenderType wrapped)
-            {
-                unWrappedLayer = wrapped.unwrap();
-            }
-
+            unWrappedLayer = tryUnwrap(layer);
 
             if(BetterEnchants.ENCHANTMENT_MASK_LAYERS.containsRenderLayer(unWrappedLayer))
             {
@@ -56,11 +53,8 @@ public class FullyBufferedMultiBufferSourceMixin {
 
         for(RenderLayer layer : encahntsRemoved)
         {
-            unWrappedLayer = layer;
-            if(layer instanceof WrappableRenderType wrapped)
-            {
-                unWrappedLayer = wrapped.unwrap();
-            }
+            unWrappedLayer = tryUnwrap(layer);
+
             if (!hasAddedEnchantments && (unWrappedLayer == RenderLayer.getGlint())) {
                 hasAddedEnchantments = true;
                 duplicate.addAll(maskLayers);
@@ -77,5 +71,14 @@ public class FullyBufferedMultiBufferSourceMixin {
             duplicate.addAll(solidLayers);
         }
         return duplicate;
+    }
+
+    private RenderLayer tryUnwrap(RenderLayer layer)
+    {
+        if(layer instanceof WrappableRenderType wrapped)
+        {
+            return(wrapped.unwrap());
+        }
+        return layer;
     }
 }
