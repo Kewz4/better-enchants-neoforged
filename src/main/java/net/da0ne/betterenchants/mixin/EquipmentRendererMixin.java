@@ -49,7 +49,7 @@ public class EquipmentRendererMixin {
                         if (layer != null && (BetterEnchants.IRIS_LOADED ? immediate instanceof FullyBufferedMultiBufferSource : ((VertexConsumerProvider_ImmediateAccessor)(immediate)).Da0ne$getMaskDirty() == BetterEnchants.ENCHANTMENT_MASK_LAYERS.getDirty())) {
                             BetterEnchants.isArmor.set(true);
 
-                            BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, true));
+                            BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(args.get(0), layer, false, true));
                         }
                     }
                     else
@@ -58,7 +58,7 @@ public class EquipmentRendererMixin {
                         //RenderLayer layer = RenderLayer.getArmorCutoutNoCull(textureIdentifier.get());
                         if (layer != null && (BetterEnchants.IRIS_LOADED ? immediate instanceof FullyBufferedMultiBufferSource : ((VertexConsumerProvider_ImmediateAccessor)(immediate)).Da0ne$getSolidDirty() == BetterEnchants.SOLID_OUTLINE_LAYERS.getDirty())) {
                             BetterEnchants.isArmor.set(true);
-                            BetterEnchants.isEnchanted.set(ItemRenderer.getArmorGlintConsumer(args.get(0), layer, false));
+                            BetterEnchants.isEnchanted.set(ItemRenderer.getItemGlintConsumer(args.get(0), layer, false, false));
                         }
                     }
                 }

@@ -6,4 +6,6 @@ public interface RenderLayerAccessor {
     public void Da0ne$setDrawBeforeCustom(boolean newDrawBeforeCustom);
     public boolean Da0ne$notLayerBuffer();
     public void Da0ne$setNotLayerBuffer(boolean newNotLayerBuffer);
+    public boolean Da0ne$isArmor();
+    public void Da0ne$setArmor(boolean newArmor);
 }
