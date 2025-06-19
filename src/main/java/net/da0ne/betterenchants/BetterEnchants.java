@@ -31,7 +31,7 @@ public class BetterEnchants implements ModInitializer {
 	public static final boolean IRIS_LOADED = FabricLoader.getInstance().isModLoaded("iris");
 
     //TODO: move all these to a seperate class.
-	public static final RenderPipeline.Snippet OUTLINE_SNIPPET = RenderPipeline.builder(RenderPipelines.MATRICES_COLOR_FOG_OFFSET_SNIPPET)
+	public static final RenderPipeline.Snippet OUTLINE_SNIPPET = RenderPipeline.builder(RenderPipelines.TRANSFORMS_PROJECTION_FOG_LIGHTING_SNIPPET)
 			.withVertexShader(Identifier.of(MOD_ID,"core/outline"))
 			.withFragmentShader(Identifier.of(MOD_ID,"core/outline"))
 			.withSampler("Sampler0")
@@ -138,7 +138,7 @@ public class BetterEnchants implements ModInitializer {
 			false,
 			CUTOUT_PIPELINE_DEPTH,
 			RenderLayer.MultiPhaseParameters.builder()
-					.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
+					.texture(new RenderPhase.Texture(texture, false))
 					.lightmap(RenderLayer.ENABLE_LIGHTMAP)
 					.build(true));
 	}
@@ -151,7 +151,7 @@ public class BetterEnchants implements ModInitializer {
 				false,
 				CUTOUT_PIPELINE_COLOR,
 				RenderLayer.MultiPhaseParameters.builder()
-						.texture(new RenderPhase.Texture(texture, TriState.FALSE, false))
+						.texture(new RenderPhase.Texture(texture, false))
 						.lightmap(RenderLayer.ENABLE_LIGHTMAP)
 						.overlay(RenderLayer.DISABLE_OVERLAY_COLOR)
 						.build(true));
