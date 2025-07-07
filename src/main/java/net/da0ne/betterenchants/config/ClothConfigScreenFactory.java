@@ -7,7 +7,7 @@ import net.da0ne.betterenchants.BetterEnchants;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.ColorHelper;
+import net.da0ne.betterenchants.util.ColorHelperCompat;
 
 public class ClothConfigScreenFactory {
     public static Screen makeConfig(Screen parent)
@@ -34,7 +34,7 @@ public class ClothConfigScreenFactory {
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().item_render_solid = newValue)
                 .build());
         render.addEntry(entryBuilder.startColorField(Text.translatable("option.betterenchants.render.color"), BetterEnchants.getConfig().getOutlineColorAsInt())
-                .setDefaultValue(ColorHelper.getArgb(0,210, 150, 248))
+                .setDefaultValue(ColorHelperCompat.getArgb(0,210, 150, 248))
                 .setTooltip(Text.translatable("tooltip.betterenchants.render.color"))
                 .setSaveConsumer(newValue -> BetterEnchants.getConfig().setOutlineColorAsInt(newValue))
                 .build());

@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.da0ne.betterenchants.BetterEnchants;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.math.ColorHelper;
+import net.da0ne.betterenchants.util.ColorHelperCompat;
 
 /**
  * Taken from webspeak
@@ -66,16 +66,16 @@ public class BetterEnchantsConfig {
     public int getOutlineColorAsInt()
     {
         float[] outlineColorFloat = getOutlineColor();
-        return ColorHelper.withAlpha(0,ColorHelper.getArgb((int)(outlineColorFloat[0]*255), (int)(outlineColorFloat[1]*255), (int)(outlineColorFloat[2]*255)));
+        return ColorHelperCompat.withAlpha(0, ColorHelperCompat.getArgb((int)(outlineColorFloat[0]*255), (int)(outlineColorFloat[1]*255), (int)(outlineColorFloat[2]*255)));
     }
 
     public void setOutlineColorAsInt(int color)
     {
-        color = ColorHelper.withAlpha(255, color);
+        color = ColorHelperCompat.withAlpha(255, color);
         float[] newOutlineColor = new float[3];
-        newOutlineColor[0] = ColorHelper.getRedFloat(color);
-        newOutlineColor[1] = ColorHelper.getGreenFloat(color);
-        newOutlineColor[2] = ColorHelper.getBlueFloat(color);
+        newOutlineColor[0] = ColorHelperCompat.getRedFloat(color);
+        newOutlineColor[1] = ColorHelperCompat.getGreenFloat(color);
+        newOutlineColor[2] = ColorHelperCompat.getBlueFloat(color);
         outline_color = newOutlineColor;
     }
 
