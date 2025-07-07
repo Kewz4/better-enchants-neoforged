@@ -4,17 +4,9 @@
 	"compatibilityLevel": "JAVA_21",
 	"plugin": "net.da0ne.betterenchants.BetterEnchantsMixinPlugin",
 	"mixins": [
-        "iris.FullyBufferedMultiBufferSourceMixin",
-		"immediatelyfast.ImmediatelyFastFixin",
-		"RenderLayerMixin",
-		"BufferBuilderStorageMixin",
-		"EquipmentRendererMixin",
-		"ItemRendererMixin",
-		"ItemRenderState_LayerRenderStateMixin",
-		"ModelPart_CuboidMixin",
-		"TridentEntityRendererMixin",
-		"VertexConsumerProvider_ImmediateMixin",
-		"WorldRendererMixin"
+        "immediatelyfast.ImmediatelyFastFixin",
+        "RenderLayerMixin",
+        "VertexConsumerProvider_ImmediateMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
